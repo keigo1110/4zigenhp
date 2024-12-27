@@ -19,12 +19,12 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
   const positionsRef = useRef<ItemPosition[]>([]);
   const animationRef = useRef<number>();
 
-  const getItemInfo = (child: React.ReactNode): { id: number; type: 'artwork' | 'member' | 'title' } | null => {
+  const getItemInfo = (child: React.ReactNode): { id: number; type: 'artwork' | 'member' | 'media' | 'title' } | null => {
     if (React.isValidElement(child)) {
       if (child.type === 'div' && child.props.className?.includes('text-xl')) {
         return { id: -1, type: 'title' };
       }
-      if (child.props.type === 'artwork' || child.props.type === 'member') {
+      if (child.props.type === 'artwork' || child.props.type === 'member' || child.props.type === 'media') {
         return {
           id: child.props.data.id,
           type: child.props.type

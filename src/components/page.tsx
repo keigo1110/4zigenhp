@@ -117,12 +117,13 @@ export default function HomeComponent() {
       />
     )),
     ...mediaArticles.map((article) => (
-      <EnhancedMediaItem
+      <EnhancedContentItem
         key={`media-${article.id}`}
-        data={article}
+        type="media"
+        data={{ ...article, description: article.title }}
         isHighlighted={highlighted?.type === 'media' && highlighted.id === article.id}
       />
-    )),
+    ))
   ];
 
   return (

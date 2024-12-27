@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ExternalLink } from 'lucide-react';
+import { MediaCard } from './MediaCard';
 
 interface CardBaseProps {
   onClick: () => void;
@@ -145,7 +146,7 @@ export function MemberCard({ member }: { member: Member }) {
 }
 
 interface EnhancedContentItemProps {
-  type: 'artwork' | 'member';
+  type: 'artwork' | 'member' | 'media';
   data: {
     id: number;
     title?: string;
@@ -154,6 +155,9 @@ interface EnhancedContentItemProps {
     image: string;
     description: string;
     link: string;
+    searchTerms: string[];
+    source?: string;
+    date?: string;
   };
   isHighlighted: boolean;
 }
@@ -182,6 +186,22 @@ export function EnhancedContentItem({ type, data, isHighlighted }: EnhancedConte
     return (
       <div className={containerStyle}>
         <MemberCard member={memberData} />
+      </div>
+    );
+  }
+
+  if (type === 'media') {
+    const mediaData = {
+      id: data.id,
+      title: data.title || '',
+      source: data.source || '',
+      date: data.date || '',
+      link: data.link,
+      image: data.image,
+    };
+    return (
+      <div className={containerStyle}>
+        <MediaCard article={mediaData} isHighlighted={isHighlighted} />
       </div>
     );
   }
