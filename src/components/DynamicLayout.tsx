@@ -34,7 +34,6 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
     return null;
   };
 
-  // 初期レイアウトの設定
   useEffect(() => {
     const initializeLayout = () => {
       const shuffledChildren = shuffleArray(children);
@@ -43,8 +42,8 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
       const containerHeight = containerRect?.height || 600;
 
       positionsRef.current = shuffledChildren.map(() => ({
-        x: getRandomFloat(0, containerWidth - 200),
-        y: getRandomFloat(0, containerHeight - 200),
+        x: getRandomFloat(0, containerWidth - 150),
+        y: getRandomFloat(0, containerHeight - 150),
         ...getRandomVelocity(3)
       }));
 
@@ -55,7 +54,7 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
       const newLayoutItems = children.map((child, index) => (
         <div
           key={index}
-          className="absolute w-48 h-48"
+          className="absolute w-36 md:w-48 h-36 md:h-48"
           style={{
             transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
             transition: searchHighlightInfo !== null ? 'all 0.5s ease-out' : 'none',
@@ -77,19 +76,19 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
     return () => window.removeEventListener('resize', handleResize);
   }, [children, searchHighlightInfo]);
 
-  // 検索ハイライト時の効果を更新
   useEffect(() => {
     if (!containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
-    const centerX = containerRect.width / 2 - 100;
-    const centerY = containerRect.height / 2 - 100;
+    const centerX = containerRect.width / 2 - 75;
+    const centerY = containerRect.height / 2 - 75;
 
     positionsRef.current = positionsRef.current.map((position, index) => {
       const itemInfo = getItemInfo(children[index]);
 
       if (searchHighlightInfo !== null && itemInfo) {
-        const matches = searchHighlightInfo !== null && searchHighlightInfo !== undefined && itemInfo.id === searchHighlightInfo.id &&
+        const matches = searchHighlightInfo !== null && searchHighlightInfo !== undefined &&
+                       itemInfo.id === searchHighlightInfo.id &&
                        itemInfo.type === searchHighlightInfo.type;
         if (matches) {
           return {
@@ -121,7 +120,7 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
       return (
         <div
           key={index}
-          className="absolute w-48 h-48"
+          className="absolute w-36 md:w-48 h-36 md:h-48"
           style={{
             transform: `translate(${position.x}px, ${position.y}px)`,
             transition: 'all 0.5s ease-out',
@@ -145,7 +144,6 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
     setLayoutItems(newLayoutItems);
   }, [searchHighlightInfo, children]);
 
-  // アニメーションの更新（検索中は一時停止）
   useEffect(() => {
     if (searchHighlightInfo !== null) return;
 
@@ -179,7 +177,7 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
       setLayoutItems(children.map((child, index) => (
         <div
           key={index}
-          className="absolute w-48 h-48"
+          className="absolute w-36 md:w-48 h-36 md:h-48"
           style={{
             transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
             transition: 'none',
@@ -204,7 +202,7 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[800px] overflow-hidden"
+      className="relative w-full h-[500px] md:h-[800px] overflow-hidden"
     >
       {layoutItems}
     </div>

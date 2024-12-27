@@ -29,23 +29,27 @@ export function SearchHeader({ onSearch }: SearchHeaderProps) {
   };
 
   return (
-    <header className="text-center mb-12 relative">
-      <div className="flex justify-center items-center mb-4">
-        <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
+    <header className="text-center mb-6 md:mb-12 relative px-4">
+      <div className="flex justify-center items-center mb-4 relative">
+        <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
           4ZIGEN
         </h1>
         <form
           onSubmit={handleSubmit}
-          className={`absolute right-4 transition-all duration-300 ease-out
-            ${isExpanded ? 'w-64' : 'w-12'}`}
+          className={`absolute right-2 md:right-4 transition-all duration-300 ease-out
+            ${isExpanded ? 'w-40 md:w-64' : 'w-10 md:w-12'}`}
         >
           <div className="relative flex items-center">
             <input
               type="text"
-              placeholder="作品・メンバーを検索"
+              placeholder="検索"
               value={searchTerm}
               onChange={handleChange}
-              className={`w-full bg-gray-800/50 backdrop-blur-sm rounded-full py-2 pl-4 pr-12
+              className={`w-full bg-gray-800/50 backdrop-blur-sm rounded-full
+                py-1.5 md:py-2
+                pl-3 md:pl-4
+                pr-8 md:pr-12
+                text-sm md:text-base
                 border border-gray-700 focus:border-purple-500 focus:outline-none
                 transition-all duration-300 ease-out text-white
                 ${isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
@@ -54,22 +58,22 @@ export function SearchHeader({ onSearch }: SearchHeaderProps) {
               <button
                 type="button"
                 onClick={handleClear}
-                className="absolute right-10 p-2 text-gray-400 hover:text-white transition-colors"
+                className="absolute right-8 md:right-10 p-1.5 md:p-2 text-gray-400 hover:text-white transition-colors"
               >
-                <X size={16} />
+                <X size={14} className="md:w-4 md:h-4" />
               </button>
             )}
             <button
               type="button"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="absolute right-2 p-2 text-white hover:text-purple-400 transition-colors"
+              className="absolute right-1 md:right-2 p-1.5 md:p-2 text-white hover:text-purple-400 transition-colors"
             >
-              <Search size={20} />
+              <Search size={16} className="md:w-5 md:h-5" />
             </button>
           </div>
         </form>
       </div>
-      <p className="text-xl text-gray-400">ポケットの中</p>
+      <p className="text-base md:text-xl text-gray-400">ポケットの中</p>
     </header>
   );
 }

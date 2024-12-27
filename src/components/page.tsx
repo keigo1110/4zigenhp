@@ -33,7 +33,6 @@ export default function HomeComponent() {
     // 作品が見つかった場合はそれを返す
     if (foundArtwork) {
       setHighlighted({ id: foundArtwork.id, type: 'artwork' });
-      console.log('Found artwork:', foundArtwork);
       return;
     }
 
@@ -47,7 +46,6 @@ export default function HomeComponent() {
 
   const layoutItems = [
     <TitleItem key="artwork-title" title="作品" />,
-    <TitleItem key="member-title" title="メンバー" />,
     ...artworks.map((artwork) => (
       <EnhancedContentItem
         key={`artwork-${artwork.id}`}
@@ -56,6 +54,7 @@ export default function HomeComponent() {
         isHighlighted={highlighted?.type === 'artwork' && highlighted.id === artwork.id}
       />
     )),
+    <TitleItem key="member-title" title="メンバー" />,
     ...members.map((member) => (
       <EnhancedContentItem
         key={`member-${member.id}`}
@@ -68,7 +67,7 @@ export default function HomeComponent() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      <div className="container mx-auto px-4 py-8 relative z-10">
+      <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 relative z-10">
         <SearchHeader onSearch={handleSearch} />
         <DynamicLayout searchHighlightInfo={highlighted}>
           {layoutItems}
@@ -103,13 +102,6 @@ export default function HomeComponent() {
         .animate-twinkle::after {
           animation-duration: 9s;
           animation-delay: -5s;
-        }
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
-        }
-        .animate-pulse {
-          animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
       `}</style>
     </div>
