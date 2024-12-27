@@ -5,42 +5,48 @@ export const artworks = [
     title: "CottonSketchPen",
     image: "/works/cottonsketchgan.jpg?height=300&width=300",
     description: "必要な時に必要なものを創り出す世界をつくりたい。",
-    link: "https://cotton-sketch-pen-hp.vercel.app/"
+    link: "https://cotton-sketch-pen-hp.vercel.app/",
+    searchTerms: ["コットンスケッチペン", "こすけ", "わた", "綿", "わたあめ機"]
   },
   {
     id: 2,
     title: "Geocussion",
     image: "/works/geophoto.jpeg?height=300&width=300",
     description: "必要な時に必要な音を作り出すことができる。",
-    link: "https://geohp.vercel.app/"
+    link: "https://geohp.vercel.app/",
+    searchTerms: ["ジオカッション", "砂場楽器"]
   },
   {
     id: 3,
     title: "Protophysica",
     image: "/works/super.jpeg?height=300&width=300",
     description: "新たな制作の可能性を広げる。",
-    link: "https://protophysicahp.vercel.app/"
+    link: "https://protophysicahp.vercel.app/",
+    searchTerms: ["プロトフィシカ", "スーパーキャパシタ", "飛ぶ"]
   },
   {
     id: 4,
     title: "Metransfer",
     image: "/works/metransfer.png?height=300&width=300",
     description: "波、泡沫、鼓動",
-    link: "https://metransferhp.vercel.app/"
+    link: "https://metransferhp.vercel.app/",
+    searchTerms: ["メトランスファー", "波", "泡沫", "鼓動", "シャボン玉", "toio"]
   },
   {
     id: 5,
     title: "Puflica",
     image: "/works/puflica.png?height=300&width=300",
     description: "ドスン，ビュン，ストン，プカプカ．",
-    link: "https://puflicahp.vercel.app/"
+    link: "https://puflicahp.vercel.app/",
+    searchTerms: ["パフリカ", "浮遊", "傘袋"]
   },
   {
     id: 6,
     title: "覗香",
     image: "/works/nozo.jpg?height=300&width=300",
     description: "香りを拡張する",
-    link: "https://nozohp.vercel.app/"
+    link: "https://nozohp.vercel.app/",
+    searchTerms: ["nozoko", "のぞこう", "香り", "拡張"]
   }
 ];
 
@@ -52,7 +58,8 @@ export const members = [
     role: "純正東大生",
     image: "/members/oka.jpg?height=200&width=200",
     bio: "おかぼっち",
-    link: "https://example.com/okasora"
+    link: "https://example.com/okasora",
+    searchTerms: ["おかそら", "Oka Sora", "東大生"]
   },
   {
     id: 2,
@@ -60,7 +67,8 @@ export const members = [
     role: "つくってワイワイ",
     image: "/members/kanazawa.jpg?height=200&width=200",
     bio: "すーぱーえくすぱんど！！！",
-    link: "https://example.com/kanazawa"
+    link: "https://example.com/kanazawa",
+    searchTerms: ["かなざわまさのぶ", "Kanazawa Masanobu"]
   },
   {
     id: 3,
@@ -68,7 +76,8 @@ export const members = [
     role: "ぐわぐわ〜",
     image: "/members/nakata.jpg?height=200&width=200",
     bio: "やるっしょ",
-    link: "https://example.com/nakata"
+    link: "https://example.com/nakata",
+    searchTerms: ["なかたゆうき", "Nakata Yuki"]
   },
   {
     id: 4,
@@ -76,7 +85,8 @@ export const members = [
     role: "hogehoge",
     image: "/members/minamida.jpg?height=200&width=200",
     bio: "しょうねん←→おじさん",
-    link: "https://t.co/Ooqsw9Je0f"
+    link: "https://t.co/Ooqsw9Je0f",
+    searchTerms: ["みなみだけいご", "Minamida Keigo"]
   }
 ];
 
@@ -88,6 +98,7 @@ export const mediaArticles = [
     source: "東京大学制作展",
     date: "2024-11-7",
     link: "https://iiiexhibition2024kamashi.vercel.app/",
-    image: "/media/light.ico?height=200&width=200"
+    image: "/media/light.ico?height=200&width=200",
+    searchTerms: ["東京大学制作展", "とうきょうだいがくせいさくてん", "", "iiiexhibition", "kamashi"]
   }
 ];

@@ -12,6 +12,13 @@ interface HighlightInfo {
   type: 'artwork' | 'member' | 'media';
 }
 
+const normalizeJapanese = (text: string): string => {
+  return text
+    .toLowerCase()
+    .replace(/[\u30a1-\u30f6]/g, char => String.fromCharCode(char.charCodeAt(0) - 0x60))
+    .replace(/[-\s]/g, '');
+};
+
 export default function HomeComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [highlighted, setHighlighted] = useState<HighlightInfo | null>(null);
@@ -32,11 +39,19 @@ export default function HomeComponent() {
       return;
     }
 
-    const searchLower = term.trim().toLowerCase();
+    const normalizedSearch = normalizeJapanese(term.trim());
 
-    const foundArtwork = artworks.find(art =>
-      art.title.toLowerCase().includes(searchLower)
-    );
+    const foundArtwork = artworks.find(art => {
+      const normalizedTitle = normalizeJapanese(art.title);
+      const normalizedDesc = normalizeJapanese(art.description);
+      const normalizedSearchTerms = art.searchTerms.map(term => normalizeJapanese(term));
+
+      return normalizedTitle.includes(normalizedSearch) ||
+             normalizedDesc.includes(normalizedSearch) ||
+             normalizedSearchTerms.some(term =>
+               term.includes(normalizedSearch) || normalizedSearch.includes(term)
+             );
+    });
 
     if (foundArtwork) {
       setHighlighted({ id: foundArtwork.id, type: 'artwork' });
@@ -44,9 +59,19 @@ export default function HomeComponent() {
       return;
     }
 
-    const foundMember = members.find(mem =>
-      mem.name.toLowerCase().includes(searchLower)
-    );
+    const foundMember = members.find(mem => {
+      const normalizedName = normalizeJapanese(mem.name);
+      const normalizedRole = normalizeJapanese(mem.role);
+      const normalizedBio = normalizeJapanese(mem.bio);
+      const normalizedSearchTerms = mem.searchTerms.map(term => normalizeJapanese(term));
+
+      return normalizedName.includes(normalizedSearch) ||
+             normalizedRole.includes(normalizedSearch) ||
+             normalizedBio.includes(normalizedSearch) ||
+             normalizedSearchTerms.some(term =>
+               term.includes(normalizedSearch) || normalizedSearch.includes(term)
+             );
+    });
 
     if (foundMember) {
       setHighlighted({ id: foundMember.id, type: 'member' });
@@ -54,10 +79,17 @@ export default function HomeComponent() {
       return;
     }
 
-    const foundMedia = mediaArticles.find(media =>
-      media.title.toLowerCase().includes(searchLower) ||
-      media.source.toLowerCase().includes(searchLower)
-    );
+    const foundMedia = mediaArticles.find(media => {
+      const normalizedTitle = normalizeJapanese(media.title);
+      const normalizedSource = normalizeJapanese(media.source);
+      const normalizedSearchTerms = media.searchTerms.map(term => normalizeJapanese(term));
+
+      return normalizedTitle.includes(normalizedSearch) ||
+             normalizedSource.includes(normalizedSearch) ||
+             normalizedSearchTerms.some(term =>
+               term.includes(normalizedSearch) || normalizedSearch.includes(term)
+             );
+    });
 
     if (foundMedia) {
       setHighlighted({ id: foundMedia.id, type: 'media' });
