@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DynamicLayout from './DynamicLayout';
 import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem, { TitleItem } from './DetailCards';
@@ -9,12 +9,20 @@ import { EnhancedMediaItem } from './MediaCard';
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member' | 'media';  // メディアタイプを追加
+  type: 'artwork' | 'member' | 'media';
 }
 
 export default function HomeComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [highlighted, setHighlighted] = useState<HighlightInfo | null>(null);
+  const [audio] = useState(() => typeof Audio !== 'undefined' ? new Audio('/music/terete.mp3') : null);
+
+  const playSearchSound = () => {
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(error => console.log('Audio playback failed:', error));
+    }
+  };
 
   const handleSearch = (term: string) => {
     setSearchTerm(term);
@@ -34,6 +42,7 @@ export default function HomeComponent() {
     // 作品が見つかった場合はそれを返す
     if (foundArtwork) {
       setHighlighted({ id: foundArtwork.id, type: 'artwork' });
+      playSearchSound();
       return;
     }
 
@@ -44,6 +53,7 @@ export default function HomeComponent() {
 
     if (foundMember) {
       setHighlighted({ id: foundMember.id, type: 'member' });
+      playSearchSound();
       return;
     }
 
@@ -53,7 +63,12 @@ export default function HomeComponent() {
       media.source.toLowerCase().includes(searchLower)
     );
 
-    setHighlighted(foundMedia ? { id: foundMedia.id, type: 'media' } : null);
+    if (foundMedia) {
+      setHighlighted({ id: foundMedia.id, type: 'media' });
+      playSearchSound();
+    } else {
+      setHighlighted(null);
+    }
   };
 
   const layoutItems = [
