@@ -3,16 +3,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { shuffleArray, getRandomFloat, getRandomVelocity, avoidCollision, updatePosition, ItemPosition, ContainerSize } from './utils';
 
-interface DynamicLayoutProps {
-  children: React.ReactNode[];
+interface HighlightInfo {
+  id: number;
+  type: 'artwork' | 'member';
 }
 
-export default function DynamicLayout({ children }: DynamicLayoutProps) {
+interface DynamicLayoutProps {
+  children: React.ReactNode[];
+  searchHighlightInfo?: HighlightInfo | null;
+}
+
+export default function DynamicLayout({ children, searchHighlightInfo }: DynamicLayoutProps) {
   const [layoutItems, setLayoutItems] = useState<React.ReactNode[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const positionsRef = useRef<ItemPosition[]>([]);
   const animationRef = useRef<number>();
 
+  const getItemInfo = (child: React.ReactNode): { id: number; type: 'artwork' | 'member' | 'title' } | null => {
+    if (React.isValidElement(child)) {
+      if (child.type === 'div' && child.props.className?.includes('text-xl')) {
+        return { id: -1, type: 'title' };
+      }
+      if (child.props.type === 'artwork' || child.props.type === 'member') {
+        return {
+          id: child.props.data.id,
+          type: child.props.type
+        };
+      }
+    }
+    return null;
+  };
+
+  // 初期レイアウトの設定
   useEffect(() => {
     const initializeLayout = () => {
       const shuffledChildren = shuffleArray(children);
@@ -20,53 +42,152 @@ export default function DynamicLayout({ children }: DynamicLayoutProps) {
       const containerWidth = containerRect?.width || 800;
       const containerHeight = containerRect?.height || 600;
 
-      const newLayoutItems = shuffledChildren.map((child, index) => {
-        const position: ItemPosition = {
-          x: getRandomFloat(0, containerWidth - 100),
-          y: getRandomFloat(0, containerHeight - 100),
-          ...getRandomVelocity(1)
-        };
-        positionsRef.current[index] = position;
+      positionsRef.current = shuffledChildren.map(() => ({
+        x: getRandomFloat(0, containerWidth - 200),
+        y: getRandomFloat(0, containerHeight - 200),
+        ...getRandomVelocity(3)
+      }));
 
-        return (
-          <div
-            key={index}
-            className="absolute bg-gray-800 p-4 rounded-lg shadow-lg overflow-hidden"
-            style={{
-              width: '100px',
-              height: '100px',
-              transform: `translate(${position.x}px, ${position.y}px)`,
-              transition: 'transform 0.5s ease-out'
-            }}
-          >
-            {child}
-          </div>
-        );
-      });
+      updateLayoutItems();
+    };
+
+    const updateLayoutItems = () => {
+      const newLayoutItems = children.map((child, index) => (
+        <div
+          key={index}
+          className="absolute w-48 h-48"
+          style={{
+            transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
+            transition: searchHighlightInfo !== null ? 'all 0.5s ease-out' : 'none',
+          }}
+        >
+          {child}
+        </div>
+      ));
       setLayoutItems(newLayoutItems);
     };
 
     initializeLayout();
-  }, [children]);
 
+    const handleResize = () => {
+      initializeLayout();
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [children, searchHighlightInfo]);
+
+  // 検索ハイライト時の効果を更新
   useEffect(() => {
-    const updatePositions = () => {
+    if (!containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const centerX = containerRect.width / 2 - 100;
+    const centerY = containerRect.height / 2 - 100;
+
+    positionsRef.current = positionsRef.current.map((position, index) => {
+      const itemInfo = getItemInfo(children[index]);
+
+      if (searchHighlightInfo !== null && itemInfo) {
+        const matches = searchHighlightInfo !== null && searchHighlightInfo !== undefined && itemInfo.id === searchHighlightInfo.id &&
+                       itemInfo.type === searchHighlightInfo.type;
+        if (matches) {
+          return {
+            ...position,
+            x: centerX,
+            y: centerY,
+            vx: 0,
+            vy: 0
+          };
+        } else if (itemInfo.type !== 'title') {
+          const angle = Math.random() * Math.PI * 2;
+          const distance = 1000;
+          return {
+            ...position,
+            x: centerX + Math.cos(angle) * distance,
+            y: centerY + Math.sin(angle) * distance,
+            vx: 0,
+            vy: 0
+          };
+        }
+      }
+      return position;
+    });
+
+    const newLayoutItems = children.map((child, index) => {
+      const itemInfo = getItemInfo(child);
+      const position = positionsRef.current[index];
+
+      return (
+        <div
+          key={index}
+          className="absolute w-48 h-48"
+          style={{
+            transform: `translate(${position.x}px, ${position.y}px)`,
+            transition: 'all 0.5s ease-out',
+            opacity: searchHighlightInfo === null ||
+                    !itemInfo ||
+                    itemInfo.type === 'title' ||
+                    (itemInfo.id === (searchHighlightInfo?.id ?? -1) &&
+                     itemInfo.type === (searchHighlightInfo?.type ?? '')) ? 1 : 0,
+            pointerEvents: searchHighlightInfo === null ||
+                          !itemInfo ||
+                          itemInfo.type === 'title' ||
+                          (itemInfo.id === (searchHighlightInfo?.id ?? -1) &&
+                           itemInfo.type === (searchHighlightInfo?.type ?? '')) ? 'auto' : 'none',
+          }}
+        >
+          {child}
+        </div>
+      );
+    });
+
+    setLayoutItems(newLayoutItems);
+  }, [searchHighlightInfo, children]);
+
+  // アニメーションの更新（検索中は一時停止）
+  useEffect(() => {
+    if (searchHighlightInfo !== null) return;
+
+    let lastTime = performance.now();
+
+    const updatePositions = (currentTime: number) => {
       const container = containerRef.current;
       if (!container) return;
 
-      const containerRect = container.getBoundingClientRect();
-      const containerSize: ContainerSize = { width: containerRect.width, height: containerRect.height };
-      const items = Array.from(container.children) as HTMLElement[];
+      const deltaTime = (currentTime - lastTime) / 16;
+      lastTime = currentTime;
 
-      positionsRef.current = positionsRef.current.map((position, index) => {
-        const updatedPosition = updatePosition(position, containerSize);
-        const otherPositions = positionsRef.current.filter((_, i) => i !== index);
+      const containerRect = container.getBoundingClientRect();
+      const containerSize: ContainerSize = {
+        width: containerRect.width,
+        height: containerRect.height
+      };
+
+      positionsRef.current = positionsRef.current.map((position) => {
+        const updatedPosition = updatePosition(position, containerSize, deltaTime);
+        const otherPositions = positionsRef.current.filter((_, i) => i !== positionsRef.current.indexOf(position));
         const avoidedPosition = avoidCollision(updatedPosition, otherPositions, containerSize);
 
-        items[index].style.transform = `translate(${avoidedPosition.x}px, ${avoidedPosition.y}px)`;
-
-        return { ...updatedPosition, ...avoidedPosition };
+        return {
+          ...updatedPosition,
+          x: avoidedPosition.x,
+          y: avoidedPosition.y
+        };
       });
+
+      setLayoutItems(children.map((child, index) => (
+        <div
+          key={index}
+          className="absolute w-48 h-48"
+          style={{
+            transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
+            transition: 'none',
+          }}
+        >
+          {child}
+        </div>
+      )));
 
       animationRef.current = requestAnimationFrame(updatePositions);
     };
@@ -78,15 +199,14 @@ export default function DynamicLayout({ children }: DynamicLayoutProps) {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, []);
+  }, [searchHighlightInfo, children]);
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[800px]"
+      className="relative w-full h-[800px] overflow-hidden"
     >
       {layoutItems}
     </div>
   );
 }
-

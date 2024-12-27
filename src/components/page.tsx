@@ -1,34 +1,76 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import DynamicLayout from './DynamicLayout';
 import { artworks, members } from './data';
+import EnhancedContentItem, { TitleItem } from './DetailCards';
+import { SearchHeader } from './SearchHeader';
 
-const ContentItem: React.FC<{ title: string }> = ({ title }) => (
-  <div className="w-full h-full flex items-center justify-center">
-    <span className="text-sm text-white">{title}</span>
-  </div>
-);
+interface HighlightInfo {
+  id: number;
+  type: 'artwork' | 'member';
+}
 
 export default function HomeComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [highlighted, setHighlighted] = useState<HighlightInfo | null>(null);
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+
+    if (!term.trim()) {
+      setHighlighted(null);
+      return;
+    }
+
+    const searchLower = term.trim().toLowerCase();
+
+    // まず作品のタイトルで検索
+    const foundArtwork = artworks.find(art =>
+      art.title.toLowerCase().includes(searchLower)
+    );
+
+    // 作品が見つかった場合はそれを返す
+    if (foundArtwork) {
+      setHighlighted({ id: foundArtwork.id, type: 'artwork' });
+      console.log('Found artwork:', foundArtwork);
+      return;
+    }
+
+    // 作品が見つからない場合はメンバー名で検索
+    const foundMember = members.find(mem =>
+      mem.name.toLowerCase().includes(searchLower)
+    );
+
+    setHighlighted(foundMember ? { id: foundMember.id, type: 'member' } : null);
+  };
+
   const layoutItems = [
-    <ContentItem key="artwork-title" title="作品" />,
-    <ContentItem key="member-title" title="メンバー" />,
-    ...artworks.map((artwork) => <ContentItem key={artwork.id} title={artwork.title} />),
-    ...members.map((member) => <ContentItem key={member.id} title={member.name} />),
+    <TitleItem key="artwork-title" title="作品" />,
+    <TitleItem key="member-title" title="メンバー" />,
+    ...artworks.map((artwork) => (
+      <EnhancedContentItem
+        key={`artwork-${artwork.id}`}
+        type="artwork"
+        data={artwork}
+        isHighlighted={highlighted?.type === 'artwork' && highlighted.id === artwork.id}
+      />
+    )),
+    ...members.map((member) => (
+      <EnhancedContentItem
+        key={`member-${member.id}`}
+        type="member"
+        data={{ ...member, description: member.bio }}
+        isHighlighted={highlighted?.type === 'member' && highlighted.id === member.id}
+      />
+    )),
   ];
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <div className="container mx-auto px-4 py-8 relative z-10">
-        <header className="text-center mb-12">
-          <h1 className="text-6xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
-            4ZIGEN
-          </h1>
-          <p className="text-xl text-gray-400">4次元を超えるアート体験</p>
-        </header>
-
-        <DynamicLayout>
+        <SearchHeader onSearch={handleSearch} />
+        <DynamicLayout searchHighlightInfo={highlighted}>
           {layoutItems}
         </DynamicLayout>
       </div>
