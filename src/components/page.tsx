@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DynamicLayout from './DynamicLayout';
 import { artworks, members, mediaArticles } from './data';
-import EnhancedContentItem, { TitleItem } from './DetailCards';
+import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
 import { EnhancedMediaItem } from './MediaCard';
 
@@ -34,19 +34,16 @@ export default function HomeComponent() {
 
     const searchLower = term.trim().toLowerCase();
 
-    // まず作品のタイトルで検索
     const foundArtwork = artworks.find(art =>
       art.title.toLowerCase().includes(searchLower)
     );
 
-    // 作品が見つかった場合はそれを返す
     if (foundArtwork) {
       setHighlighted({ id: foundArtwork.id, type: 'artwork' });
       playSearchSound();
       return;
     }
 
-    // 作品が見つからない場合はメンバー名で検索
     const foundMember = members.find(mem =>
       mem.name.toLowerCase().includes(searchLower)
     );
@@ -57,7 +54,6 @@ export default function HomeComponent() {
       return;
     }
 
-    // メンバーが見つからない場合はメディア記事で検索
     const foundMedia = mediaArticles.find(media =>
       media.title.toLowerCase().includes(searchLower) ||
       media.source.toLowerCase().includes(searchLower)
@@ -72,7 +68,6 @@ export default function HomeComponent() {
   };
 
   const layoutItems = [
-    <TitleItem key="artwork-title" title="作品" />,
     ...artworks.map((artwork) => (
       <EnhancedContentItem
         key={`artwork-${artwork.id}`}
@@ -81,7 +76,6 @@ export default function HomeComponent() {
         isHighlighted={highlighted?.type === 'artwork' && highlighted.id === artwork.id}
       />
     )),
-    <TitleItem key="member-title" title="メンバー" />,
     ...members.map((member) => (
       <EnhancedContentItem
         key={`member-${member.id}`}
@@ -90,7 +84,6 @@ export default function HomeComponent() {
         isHighlighted={highlighted?.type === 'member' && highlighted.id === member.id}
       />
     )),
-    <TitleItem key="media-title" title="メディア" />,
     ...mediaArticles.map((article) => (
       <EnhancedMediaItem
         key={`media-${article.id}`}

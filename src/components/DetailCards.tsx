@@ -189,12 +189,4 @@ export function EnhancedContentItem({ type, data, isHighlighted }: EnhancedConte
   return null;
 }
 
-export const TitleItem = ({ title }: { title: string }) => {
-  return (
-    <div className="text-lg md:text-xl font-bold mb-4">
-      {title}
-    </div>
-  );
-};
-
 export default EnhancedContentItem;
