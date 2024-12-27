@@ -2,13 +2,14 @@
 
 import React, { useState } from 'react';
 import DynamicLayout from './DynamicLayout';
-import { artworks, members } from './data';
+import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem, { TitleItem } from './DetailCards';
 import { SearchHeader } from './SearchHeader';
+import { EnhancedMediaItem } from './MediaCard';
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member';
+  type: 'artwork' | 'member' | 'media';  // メディアタイプを追加
 }
 
 export default function HomeComponent() {
@@ -41,7 +42,18 @@ export default function HomeComponent() {
       mem.name.toLowerCase().includes(searchLower)
     );
 
-    setHighlighted(foundMember ? { id: foundMember.id, type: 'member' } : null);
+    if (foundMember) {
+      setHighlighted({ id: foundMember.id, type: 'member' });
+      return;
+    }
+
+    // メンバーが見つからない場合はメディア記事で検索
+    const foundMedia = mediaArticles.find(media =>
+      media.title.toLowerCase().includes(searchLower) ||
+      media.source.toLowerCase().includes(searchLower)
+    );
+
+    setHighlighted(foundMedia ? { id: foundMedia.id, type: 'media' } : null);
   };
 
   const layoutItems = [
@@ -61,6 +73,14 @@ export default function HomeComponent() {
         type="member"
         data={{ ...member, description: member.bio }}
         isHighlighted={highlighted?.type === 'member' && highlighted.id === member.id}
+      />
+    )),
+    <TitleItem key="media-title" title="メディア" />,
+    ...mediaArticles.map((article) => (
+      <EnhancedMediaItem
+        key={`media-${article.id}`}
+        data={article}
+        isHighlighted={highlighted?.type === 'media' && highlighted.id === article.id}
       />
     )),
   ];

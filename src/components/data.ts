@@ -1,3 +1,4 @@
+// ーーーーーーーーー作品ーーーーーーーーー
 export const artworks = [
   {
     id: 1,
@@ -43,6 +44,7 @@ export const artworks = [
   }
 ];
 
+// ーーーーーーーーーメンバーーーーーーーーー
 export const members = [
   {
     id: 1,
@@ -75,5 +77,17 @@ export const members = [
     image: "/members/minamida.jpg?height=200&width=200",
     bio: "しょうねん←→おじさん",
     link: "https://t.co/Ooqsw9Je0f"
+  }
+];
+
+// ーーーーーーーーーメディア記事ーーーーーーーーー
+export const mediaArticles = [
+  {
+    id: 1,
+    title: "東京大学制作展2024",
+    source: "東京大学制作展",
+    date: "2024-11-7",
+    link: "https://iiiexhibition2024kamashi.vercel.app/",
+    image: "/media/light.ico?height=200&width=200"
   }
 ];

@@ -5,7 +5,7 @@ import { shuffleArray, getRandomFloat, getRandomVelocity, avoidCollision, update
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member';
+  type: 'artwork' | 'member' | 'media';
 }
 
 interface DynamicLayoutProps {
