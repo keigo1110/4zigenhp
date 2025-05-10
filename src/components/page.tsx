@@ -1,17 +1,24 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import DynamicLayout from './DynamicLayout';
 import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
-import { EnhancedMediaItem } from './MediaCard';
 
 interface HighlightInfo {
   id: number;
   type: 'artwork' | 'member' | 'media';
 }
 
+interface SearchableItem {
+  id: number;
+  type: 'artwork' | 'member' | 'media';
+  searchableText: string[];
+  originalData: any;
+}
+
+// 日本語のテキスト正規化関数
 const normalizeJapanese = (text: string): string => {
   return text
     .toLowerCase()
@@ -24,6 +31,57 @@ export default function HomeComponent() {
   const [highlighted, setHighlighted] = useState<HighlightInfo | null>(null);
   const [audio] = useState(() => typeof Audio !== 'undefined' ? new Audio('/music/terete.mp3') : null);
 
+  // 検索可能な項目のインデックスを構築
+  const searchableItems = useMemo<SearchableItem[]>(() => {
+    const items: SearchableItem[] = [];
+
+    // 作品データのインデックス化
+    artworks.forEach(artwork => {
+      items.push({
+        id: artwork.id,
+        type: 'artwork',
+        searchableText: [
+          artwork.title,
+          artwork.description,
+          ...artwork.searchTerms
+        ],
+        originalData: artwork
+      });
+    });
+
+    // メンバーデータのインデックス化
+    members.forEach(member => {
+      items.push({
+        id: member.id,
+        type: 'member',
+        searchableText: [
+          member.name,
+          member.role,
+          member.bio,
+          ...member.searchTerms
+        ],
+        originalData: member
+      });
+    });
+
+    // メディア記事データのインデックス化
+    mediaArticles.forEach(article => {
+      items.push({
+        id: article.id,
+        type: 'media',
+        searchableText: [
+          article.title,
+          article.source,
+          article.date,
+          ...article.searchTerms
+        ],
+        originalData: article
+      });
+    });
+
+    return items;
+  }, []);
+
   const playSearchSound = () => {
     if (audio) {
       audio.currentTime = 0;
@@ -31,6 +89,7 @@ export default function HomeComponent() {
     }
   };
 
+  // 検索関数の改善版
   const handleSearch = (term: string) => {
     setSearchTerm(term);
 
@@ -41,58 +100,71 @@ export default function HomeComponent() {
 
     const normalizedSearch = normalizeJapanese(term.trim());
 
-    const foundArtwork = artworks.find(art => {
-      const normalizedTitle = normalizeJapanese(art.title);
-      const normalizedDesc = normalizeJapanese(art.description);
-      const normalizedSearchTerms = art.searchTerms.map(term => normalizeJapanese(term));
+    // 検索スコアリングとマッチング
+    const searchResults = searchableItems
+      .map(item => {
+        // 各項目にスコアを付ける
+        let score = 0;
+        let hasExactMatch = false;
 
-      return normalizedTitle.includes(normalizedSearch) ||
-             normalizedDesc.includes(normalizedSearch) ||
-             normalizedSearchTerms.some(term =>
-               term.includes(normalizedSearch) || normalizedSearch.includes(term)
-             );
-    });
+        // 正規化されたテキストでスコアリング
+        item.searchableText.forEach(text => {
+          const normalizedText = normalizeJapanese(text);
 
-    if (foundArtwork) {
-      setHighlighted({ id: foundArtwork.id, type: 'artwork' });
-      playSearchSound();
-      return;
-    }
+          // 完全一致
+          if (normalizedText === normalizedSearch) {
+            score += 100;
+            hasExactMatch = true;
+          }
+          // 前方一致（"プロト"で"プロトフィシカ"を検索など）
+          else if (normalizedText.startsWith(normalizedSearch)) {
+            score += 50;
+          }
+          // 部分一致
+          else if (normalizedText.includes(normalizedSearch)) {
+            score += 25;
+          }
+          // 逆に検索語が項目テキストに含まれる場合（キーワードが長い場合）
+          else if (normalizedSearch.includes(normalizedText) && normalizedText.length > 1) {
+            score += 10;
+          }
 
-    const foundMember = members.find(mem => {
-      const normalizedName = normalizeJapanese(mem.name);
-      const normalizedRole = normalizeJapanese(mem.role);
-      const normalizedBio = normalizeJapanese(mem.bio);
-      const normalizedSearchTerms = mem.searchTerms.map(term => normalizeJapanese(term));
+          // 編集距離の近さで緩やかなファジー検索（簡易実装）
+          // normalizedSearchとnormalizedTextの文字の一致度を考慮
+          let commonChars = 0;
+          for (let i = 0; i < normalizedSearch.length; i++) {
+            if (normalizedText.includes(normalizedSearch[i])) {
+              commonChars++;
+            }
+          }
 
-      return normalizedName.includes(normalizedSearch) ||
-             normalizedRole.includes(normalizedSearch) ||
-             normalizedBio.includes(normalizedSearch) ||
-             normalizedSearchTerms.some(term =>
-               term.includes(normalizedSearch) || normalizedSearch.includes(term)
-             );
-    });
+          // 共通文字率を計算してスコアに追加
+          if (normalizedSearch.length > 0) {
+            const commonRatio = commonChars / normalizedSearch.length;
+            if (commonRatio > 0.6) { // 60%以上の文字が一致
+              score += Math.round(commonRatio * 15);
+            }
+          }
+        });
 
-    if (foundMember) {
-      setHighlighted({ id: foundMember.id, type: 'member' });
-      playSearchSound();
-      return;
-    }
+        return { item, score, hasExactMatch };
+      })
+      .filter(result => result.score > 0) // スコアがある項目だけをフィルタリング
+      .sort((a, b) => {
+        // 完全一致があるものを優先
+        if (a.hasExactMatch && !b.hasExactMatch) return -1;
+        if (!a.hasExactMatch && b.hasExactMatch) return 1;
+        // それ以外はスコアでソート
+        return b.score - a.score;
+      });
 
-    const foundMedia = mediaArticles.find(media => {
-      const normalizedTitle = normalizeJapanese(media.title);
-      const normalizedSource = normalizeJapanese(media.source);
-      const normalizedSearchTerms = media.searchTerms.map(term => normalizeJapanese(term));
-
-      return normalizedTitle.includes(normalizedSearch) ||
-             normalizedSource.includes(normalizedSearch) ||
-             normalizedSearchTerms.some(term =>
-               term.includes(normalizedSearch) || normalizedSearch.includes(term)
-             );
-    });
-
-    if (foundMedia) {
-      setHighlighted({ id: foundMedia.id, type: 'media' });
+    if (searchResults.length > 0) {
+      // 最も高いスコアの結果をハイライト
+      const topResult = searchResults[0];
+      setHighlighted({
+        id: topResult.item.id,
+        type: topResult.item.type
+      });
       playSearchSound();
     } else {
       setHighlighted(null);
@@ -133,6 +205,10 @@ export default function HomeComponent() {
         <DynamicLayout searchHighlightInfo={highlighted}>
           {layoutItems}
         </DynamicLayout>
+
+        <footer className="mt-16 pb-4 text-center text-xs text-gray-600 opacity-60">
+          <p>© {new Date().getFullYear()} 4ZIGEN All Rights Reserved.</p>
+        </footer>
       </div>
 
       <div className="fixed inset-0 pointer-events-none">

@@ -1,0 +1,6 @@
+# 全てのユーザーエージェントに対する設定
+User-agent: *
+Allow: /
+
+# サイトマップの場所
+Sitemap: https://4zigen.vercel.app/sitemap.xml

@@ -47,6 +47,14 @@ export const artworks = [
     description: "香りを拡張する",
     link: "https://nozohp.vercel.app/",
     searchTerms: ["nozoko", "のぞこう", "香り", "拡張"]
+  },
+  {
+    id: 7,
+    title: "Protozoa",
+    image: "/works/wat.png?height=300&width=300",
+    description: "触れたら動き出す原生機械種",
+    link: "https://protozoahp.vercel.app/",
+    searchTerms: ["プロトゾア", "原生機械種", "原生生物"]
   }
 ];
 
@@ -67,7 +75,7 @@ export const members = [
     role: "つくってワイワイ",
     image: "/members/kanazawa.jpg?height=200&width=200",
     bio: "すーぱーえくすぱんど！！！",
-    link: "https://example.com/kanazawa",
+    link: "https://kanassi.info/",
     searchTerms: ["かなざわまさのぶ", "Kanazawa Masanobu"]
   },
   {
@@ -76,7 +84,7 @@ export const members = [
     role: "ぐわぐわ〜",
     image: "/members/nakata.jpg?height=200&width=200",
     bio: "やるっしょ",
-    link: "https://example.com/nakata",
+    link: "https://yuki-nakata.org/",
     searchTerms: ["なかたゆうき", "Nakata Yuki"]
   },
   {
@@ -85,7 +93,7 @@ export const members = [
     role: "hogehoge",
     image: "/members/minamida.jpg?height=200&width=200",
     bio: "しょうねん←→おじさん",
-    link: "https://t.co/Ooqsw9Je0f",
+    link: "https://keigominamida.com/",
     searchTerms: ["みなみだけいご", "Minamida Keigo"]
   }
 ];
