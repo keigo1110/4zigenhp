@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, LayoutGrid } from 'lucide-react';
 
 interface SearchHeaderProps {
   onSearch: (term: string) => void;
+  onGalleryClick?: () => void;
 }
 
-export function SearchHeader({ onSearch }: SearchHeaderProps) {
+export function SearchHeader({ onSearch, onGalleryClick }: SearchHeaderProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -42,9 +43,23 @@ export function SearchHeader({ onSearch }: SearchHeaderProps) {
   return (
     <header className="text-center mb-6 md:mb-12 relative px-4">
       <div className="flex justify-center items-center mb-4 relative">
+        {/* ギャラリーボタン（左側） */}
+        {onGalleryClick && (
+          <button
+            onClick={onGalleryClick}
+            className="absolute left-2 md:left-4 p-3 md:p-2 rounded-full bg-gray-800/50 hover:bg-gray-700/50
+              transition-all duration-300 hover:scale-105 group"
+            aria-label="ギャラリーを開く"
+          >
+            <LayoutGrid size={18} className="md:w-5 md:h-5 text-white group-hover:text-purple-400 transition-colors" />
+          </button>
+        )}
+
         <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
           4ZIGEN
         </h1>
+
+        {/* 検索フォーム（右側） */}
         <form
           onSubmit={handleSubmit}
           className={`absolute right-2 md:right-4 transition-all duration-300 ease-out

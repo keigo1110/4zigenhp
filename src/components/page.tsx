@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import DynamicLayout from './DynamicLayout';
 import InfiniteScrollLayout from './InfiniteScrollLayout';
+import GalleryPage from './GalleryPage';
 import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
@@ -33,6 +34,7 @@ export default function HomeComponent() {
   const [audio] = useState(() => typeof Audio !== 'undefined' ? new Audio('/music/terete.mp3') : null);
   const [isMobile, setIsMobile] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [showGallery, setShowGallery] = useState(false);
 
   // モバイル判定とページロード状態
   useEffect(() => {
@@ -62,6 +64,15 @@ export default function HomeComponent() {
       clearTimeout(loadTimeout);
     };
   }, []);
+
+  // ギャラリーページの表示切り替え
+  const handleGalleryClick = () => {
+    setShowGallery(true);
+  };
+
+  const handleBackFromGallery = () => {
+    setShowGallery(false);
+  };
 
   // 検索可能な項目のインデックスを構築
   const searchableItems = useMemo<SearchableItem[]>(() => {
@@ -203,7 +214,7 @@ export default function HomeComponent() {
     }
   };
 
-  const layoutItems = [
+  const layoutItems = useMemo(() => [
     ...artworks.map((artwork) => (
       <EnhancedContentItem
         key={`artwork-${artwork.id}`}
@@ -228,9 +239,14 @@ export default function HomeComponent() {
         isHighlighted={highlighted?.type === 'media' && highlighted.id === article.id}
       />
     ))
-  ];
+  ], [highlighted]);
 
-        // モバイル版の場合は無限スクロールレイアウトを表示
+  // ギャラリーページを表示する場合
+  if (showGallery) {
+    return <GalleryPage onBack={handleBackFromGallery} />;
+  }
+
+  // モバイル版の場合は無限スクロールレイアウトを表示
   if (isMobile) {
     return (
       <div className={`min-h-screen bg-black text-white transition-opacity duration-500 ${
@@ -248,7 +264,10 @@ export default function HomeComponent() {
           isPageLoaded ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
         }`}>
           <div className="px-2 py-6">
-            <SearchHeader onSearch={handleSearch} />
+            <SearchHeader
+              onSearch={handleSearch}
+              onGalleryClick={handleGalleryClick}
+            />
           </div>
         </div>
 
@@ -274,7 +293,10 @@ export default function HomeComponent() {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 relative z-10">
-        <SearchHeader onSearch={handleSearch} />
+        <SearchHeader
+          onSearch={handleSearch}
+          onGalleryClick={handleGalleryClick}
+        />
         <DynamicLayout searchHighlightInfo={highlighted}>
           {layoutItems}
         </DynamicLayout>

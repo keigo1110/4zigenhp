@@ -65,7 +65,7 @@ export const members = [
     name: "岡空来",
     role: "純正東大生",
     image: "/members/oka.jpg?height=200&width=200",
-    bio: "おかぼっち",
+    bio: "修行中",
     link: "https://example.com/okasora",
     searchTerms: ["おかそら", "Oka Sora", "東大生"]
   },
