@@ -268,15 +268,6 @@ export default function HomeComponent() {
     }
 
     return [
-      <div key="title" className="text-xl md:text-2xl font-light text-center mb-8 text-gray-300">
-        <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-          ワクワク
-        </span>
-        と
-        <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-          創り出す
-        </span>
-      </div>,
       ...artworks.map(artwork => (
         <EnhancedContentItem
           key={`artwork-${artwork.id}`}
