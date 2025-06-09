@@ -7,6 +7,7 @@ import GalleryPage from './GalleryPage';
 import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
+import { trackSearch, trackArtworkView, trackGalleryInteraction } from '@/lib/analytics';
 
 interface HighlightInfo {
   id: number;
@@ -65,13 +66,26 @@ export default function HomeComponent() {
     };
   }, []);
 
+  // SEO用のpage title更新
+  useEffect(() => {
+    if (searchTerm) {
+      document.title = `"${searchTerm}" の検索結果 | 4ZIGEN`;
+    } else if (showGallery) {
+      document.title = 'ギャラリー | 4ZIGEN - 東京大学発ワクワククリエイター集団';
+    } else {
+      document.title = '4ZIGEN | 東京大学発 ワクワククリエイター集団 - デジタルファブリケーション・メディアアート';
+    }
+  }, [searchTerm, showGallery]);
+
   // ギャラリーページの表示切り替え
   const handleGalleryClick = () => {
     setShowGallery(true);
+    trackGalleryInteraction('open', 'gallery_page');
   };
 
   const handleBackFromGallery = () => {
     setShowGallery(false);
+    trackGalleryInteraction('close', 'gallery_page');
   };
 
   // 検索可能な項目のインデックスを構築
@@ -212,34 +226,70 @@ export default function HomeComponent() {
     } else {
       setHighlighted(null);
     }
+
+    // 検索の追跡
+    if (term.length >= 2) {
+      trackSearch(term, searchResults.length);
+    }
   };
 
-  const layoutItems = useMemo(() => [
-    ...artworks.map((artwork) => (
-      <EnhancedContentItem
-        key={`artwork-${artwork.id}`}
-        type="artwork"
-        data={artwork}
-        isHighlighted={highlighted?.type === 'artwork' && highlighted.id === artwork.id}
-      />
-    )),
-    ...members.map((member) => (
-      <EnhancedContentItem
-        key={`member-${member.id}`}
-        type="member"
-        data={{ ...member, description: member.bio }}
-        isHighlighted={highlighted?.type === 'member' && highlighted.id === member.id}
-      />
-    )),
-    ...mediaArticles.map((article) => (
-      <EnhancedContentItem
-        key={`media-${article.id}`}
-        type="media"
-        data={{ ...article, description: article.title }}
-        isHighlighted={highlighted?.type === 'media' && highlighted.id === article.id}
-      />
-    ))
-  ], [highlighted]);
+  const layoutItems = useMemo(() => {
+    if (searchResults) {
+      return searchResults.map(({ type, item }) => (
+        <EnhancedContentItem
+          key={`${type}-${item.id}`}
+          type={type}
+          data={item}
+          isHighlighted={highlighted?.id === item.id && highlighted?.type === type}
+          onClick={() => {
+            // 作品閲覧の追跡
+            if (type === 'artwork') {
+              trackArtworkView(item.title || '', type);
+            }
+          }}
+        />
+      ));
+    }
+
+    return [
+      <div key="title" className="text-xl md:text-2xl font-light text-center mb-8 text-gray-300">
+        <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+          ワクワク
+        </span>
+        と
+        <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+          創り出す
+        </span>
+      </div>,
+      ...artworks.map(artwork => (
+        <EnhancedContentItem
+          key={`artwork-${artwork.id}`}
+          type="artwork"
+          data={artwork}
+          isHighlighted={highlighted?.id === artwork.id && highlighted?.type === 'artwork'}
+          onClick={() => trackArtworkView(artwork.title, 'artwork')}
+        />
+      )),
+      ...members.map(member => (
+        <EnhancedContentItem
+          key={`member-${member.id}`}
+          type="member"
+          data={member}
+          isHighlighted={highlighted?.id === member.id && highlighted?.type === 'member'}
+          onClick={() => trackArtworkView(member.name, 'member')}
+        />
+      )),
+      ...mediaArticles.map(article => (
+        <EnhancedContentItem
+          key={`media-${article.id}`}
+          type="media"
+          data={article}
+          isHighlighted={highlighted?.id === article.id && highlighted?.type === 'media'}
+          onClick={() => trackArtworkView(article.title, 'media')}
+        />
+      ))
+    ];
+  }, [searchResults, highlighted]);
 
   // ギャラリーページを表示する場合
   if (showGallery) {
@@ -292,17 +342,46 @@ export default function HomeComponent() {
   // PC版の従来レイアウト
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
+      {/* SEO用の隠しコンテンツ - AIクローラー向け */}
+      <div className="sr-only">
+        <h1>4ZIGEN - 東京大学発ワクワククリエイター集団</h1>
+        <p>デジタルファブリケーション、メディアアート、インタラクティブアートの分野で革新的な作品を制作する東京大学の学生集団です。</p>
+        <nav aria-label="主要作品">
+          <ul>
+            {artworks.map(artwork => (
+              <li key={artwork.id}>
+                <a href={artwork.link}>{artwork.title} - {artwork.description}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <section aria-label="メンバー紹介">
+          {members.map(member => (
+            <article key={member.id}>
+              <h3>{member.name} - {member.role}</h3>
+              <p>{member.bio}</p>
+              <a href={member.link}>プロフィールを見る</a>
+            </article>
+          ))}
+        </section>
+      </div>
+
       <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 relative z-10">
         <SearchHeader
           onSearch={handleSearch}
           onGalleryClick={handleGalleryClick}
         />
-        <DynamicLayout searchHighlightInfo={highlighted}>
-          {layoutItems}
-        </DynamicLayout>
+        <main role="main" aria-label="作品とアーティストの展示">
+          <DynamicLayout searchHighlightInfo={highlighted}>
+            {layoutItems}
+          </DynamicLayout>
+        </main>
 
         <footer className="mt-16 pb-4 text-center text-xs text-gray-600 opacity-60">
           <p>© {new Date().getFullYear()} 4ZIGEN All Rights Reserved.</p>
+          <address className="not-italic mt-2">
+            Contact: <a href="mailto:contact@4zigen.com">contact@4zigen.com</a>
+          </address>
         </footer>
       </div>
 

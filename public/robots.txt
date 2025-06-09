@@ -2,5 +2,66 @@
 User-agent: *
 Allow: /
 
+# AIクローラー対応 - 学習・インデックス許可
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: bingbot
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+# 主要検索エンジンのクローラー頻度指定
+Crawl-delay: 1
+
 # サイトマップの場所
 Sitemap: https://4zigen.vercel.app/sitemap.xml
+
+# 4ZIGENについて
+# 東京大学の学生によるワクワクものづくり集団
+# デジタルファブリケーション、メディアアート、インタラクティブアート、スタートアップ、起業、研究、HCI
+# 作品: CottonSketchPen, Geocussion, Protophysica, Metransfer, Puflica, 覗香, Protozoa
+# メンバー: 岡空来, 金澤政宜, 中田裕紀, 南田桂吾

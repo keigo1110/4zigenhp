@@ -1,0 +1,117 @@
+{
+    "name": "4ZIGEN - 東京大学発ワクワククリエイター集団",
+    "short_name": "4ZIGEN",
+    "description": "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "#8B5CF6",
+    "orientation": "portrait-primary",
+    "categories": [
+        "art",
+        "education",
+        "technology",
+        "creativity"
+    ],
+    "lang": "ja",
+    "scope": "/",
+    "icons": [
+        {
+            "src": "/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "/screenshots/desktop-home.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "platform": "wide",
+            "label": "4ZIGEN メインページ"
+        },
+        {
+            "src": "/screenshots/mobile-home.png",
+            "sizes": "360x640",
+            "type": "image/png",
+            "platform": "narrow",
+            "label": "4ZIGEN モバイル版"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "ギャラリー",
+            "short_name": "Gallery",
+            "description": "作品とアーティストのギャラリーを見る",
+            "url": "/gallery",
+            "icons": [
+                {
+                    "src": "/icons/gallery-icon.png",
+                    "sizes": "96x96"
+                }
+            ]
+        },
+        {
+            "name": "作品検索",
+            "short_name": "Search",
+            "description": "作品やアーティストを検索する",
+            "url": "/?search=",
+            "icons": [
+                {
+                    "src": "/icons/search-icon.png",
+                    "sizes": "96x96"
+                }
+            ]
+        }
+    ],
+    "related_applications": [
+        {
+            "platform": "web",
+            "url": "https://4zigen.vercel.app/"
+        }
+    ],
+    "prefer_related_applications": false
+}
