@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import DynamicLayout from './DynamicLayout';
+import InfiniteScrollLayout from './InfiniteScrollLayout';
 import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
@@ -30,6 +31,37 @@ export default function HomeComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   const [highlighted, setHighlighted] = useState<HighlightInfo | null>(null);
   const [audio] = useState(() => typeof Audio !== 'undefined' ? new Audio('/music/terete.mp3') : null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+
+  // モバイル判定とページロード状態
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 768); // md breakpoint
+    };
+
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+
+    // 検索クリアイベントのリスナー
+    const handleClearSearch = () => {
+      setSearchTerm('');
+      setHighlighted(null);
+    };
+
+    window.addEventListener('clearSearch', handleClearSearch);
+
+    // ページロード完了を少し遅延させて自然に
+    const loadTimeout = setTimeout(() => {
+      setIsPageLoaded(true);
+    }, 100);
+
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+      window.removeEventListener('clearSearch', handleClearSearch);
+      clearTimeout(loadTimeout);
+    };
+  }, []);
 
   // 検索可能な項目のインデックスを構築
   const searchableItems = useMemo<SearchableItem[]>(() => {
@@ -198,6 +230,47 @@ export default function HomeComponent() {
     ))
   ];
 
+        // モバイル版の場合は無限スクロールレイアウトを表示
+  if (isMobile) {
+    return (
+      <div className={`min-h-screen bg-black text-white transition-opacity duration-500 ${
+        isPageLoaded ? 'opacity-100' : 'opacity-0'
+      }`}>
+        {/* 背景を最初から表示 */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <div className="absolute inset-0 bg-black"></div>
+          <div className="absolute inset-0 bg-[url('/stars.png')] opacity-30 animate-twinkle"></div>
+          <div className="absolute inset-0 bg-gradient-radial from-transparent to-black"></div>
+        </div>
+
+        {/* 固定ヘッダー */}
+        <div className={`fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-700 transition-all duration-700 ${
+          isPageLoaded ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+        }`}>
+          <div className="px-2 py-6">
+            <SearchHeader onSearch={handleSearch} />
+          </div>
+        </div>
+
+        {/* メインコンテンツ */}
+        <div className="pt-36">
+          <InfiniteScrollLayout searchHighlightInfo={highlighted} />
+        </div>
+
+        <style jsx global>{`
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+          }
+          .animate-twinkle {
+            animation: twinkle 8s ease-in-out infinite;
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  // PC版の従来レイアウト
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 relative z-10">
