@@ -1,8 +1,9 @@
 // MediaCard.tsx
 import React from 'react';
 import Image from 'next/image';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ExternalLink, Calendar } from 'lucide-react';
+import { trackArtworkView } from '@/lib/analytics';
 
 interface MediaArticle {
   id: number;
@@ -21,10 +22,19 @@ interface MediaCardProps {
 export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleCardClick = () => {
+    setIsOpen(true);
+    trackArtworkView(article.title, 'media');
+  };
+
+  const handleLinkClick = () => {
+    trackArtworkView(`${article.title}_external_link`, 'media');
+  };
+
   return (
     <>
       <div
-        onClick={() => setIsOpen(true)}
+        onClick={handleCardClick}
         className={`aspect-square h-24 md:h-32 backdrop-blur-sm rounded-full p-2 md:p-3
           transition-all duration-500 cursor-pointer
           border border-gray-700
@@ -54,29 +64,30 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
             <DialogTitle className="text-xl md:text-2xl font-bold">{article.title}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
-            <div className="flex items-center space-x-4">
+            <div className="flex items-start space-x-4">
               <Image
                 src={article.image}
                 alt={article.source}
-                width={200}
-                height={200}
-                className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover"
+                width={100}
+                height={100}
+                className="w-16 h-16 rounded-lg object-cover"
               />
-              <div>
-                <h4 className="text-lg text-purple-400">{article.source}</h4>
-                <div className="flex items-center text-sm text-gray-400 mt-1">
-                  <Calendar size={14} className="mr-1" />
-                  <span>{article.date}</span>
-                </div>
+              <div className="flex-1">
+                <p className="text-purple-400 font-medium">{article.source}</p>
+                <p className="text-sm text-gray-400">{article.date}</p>
               </div>
             </div>
+            <DialogDescription className="text-sm md:text-base text-gray-300">
+              {article.title}
+            </DialogDescription>
             <a
               href={article.link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleLinkClick}
               className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300"
             >
-              <span>記事を読む</span>
+              <span className="text-sm md:text-base">記事を読む</span>
               <ExternalLink size={16} />
             </a>
           </div>

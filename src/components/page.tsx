@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import DynamicLayout from './DynamicLayout';
 import InfiniteScrollLayout from './InfiniteScrollLayout';
 import GalleryPage from './GalleryPage';
@@ -21,12 +21,13 @@ interface SearchableItem {
   originalData: any;
 }
 
-// 日本語のテキスト正規化関数
+// 日本語の正規化関数（ひらがな・カタカナ・半角全角の統一）
 const normalizeJapanese = (text: string): string => {
   return text
     .toLowerCase()
-    .replace(/[\u30a1-\u30f6]/g, char => String.fromCharCode(char.charCodeAt(0) - 0x60))
-    .replace(/[-\s]/g, '');
+    .replace(/[ァ-ヶ]/g, (match) => String.fromCharCode(match.charCodeAt(0) - 0x60))
+    .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
+    .replace(/[‐－−]/g, '-');
 };
 
 export default function HomeComponent() {
@@ -36,6 +37,14 @@ export default function HomeComponent() {
   const [isMobile, setIsMobile] = useState(false);
   const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [showGallery, setShowGallery] = useState(false);
+
+  // playSearchSound関数をuseCallbackでメモ化
+  const playSearchSound = useCallback(() => {
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(error => console.log('Audio playback failed:', error));
+    }
+  }, [audio]);
 
   // モバイル判定とページロード状態
   useEffect(() => {
@@ -117,7 +126,10 @@ export default function HomeComponent() {
           member.bio,
           ...member.searchTerms
         ],
-        originalData: member
+        originalData: {
+          ...member,
+          description: member.bio // bioをdescriptionとしてマッピング
+        }
       });
     });
 
@@ -132,33 +144,26 @@ export default function HomeComponent() {
           article.date,
           ...article.searchTerms
         ],
-        originalData: article
+        originalData: {
+          ...article,
+          description: article.title // titleをdescriptionとしてマッピング
+        }
       });
     });
 
     return items;
   }, []);
 
-  const playSearchSound = () => {
-    if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(error => console.log('Audio playback failed:', error));
-    }
-  };
-
-  // 検索関数の改善版
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-
-    if (!term.trim()) {
-      setHighlighted(null);
-      return;
+  // 検索結果の計算
+  const searchResults = useMemo(() => {
+    if (!searchTerm.trim()) {
+      return null;
     }
 
-    const normalizedSearch = normalizeJapanese(term.trim());
+    const normalizedSearch = normalizeJapanese(searchTerm.trim());
 
     // 検索スコアリングとマッチング
-    const searchResults = searchableItems
+    const results = searchableItems
       .map(item => {
         // 各項目にスコアを付ける
         let score = 0;
@@ -187,7 +192,6 @@ export default function HomeComponent() {
           }
 
           // 編集距離の近さで緩やかなファジー検索（簡易実装）
-          // normalizedSearchとnormalizedTextの文字の一致度を考慮
           let commonChars = 0;
           for (let i = 0; i < normalizedSearch.length; i++) {
             if (normalizedText.includes(normalizedSearch[i])) {
@@ -215,38 +219,50 @@ export default function HomeComponent() {
         return b.score - a.score;
       });
 
-    if (searchResults.length > 0) {
-      // 最も高いスコアの結果をハイライト
+    // 検索の追跡
+    if (searchTerm.length >= 2) {
+      trackSearch(searchTerm, results.length);
+    }
+
+    return results;
+  }, [searchTerm, searchableItems]);
+
+  // 検索関数
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+
+    if (!term.trim()) {
+      setHighlighted(null);
+      return;
+    }
+
+    // searchResultsはuseMemoで計算される
+    // ハイライト設定は useEffect で行う
+  };
+
+  // 検索結果に基づくハイライト設定
+  useEffect(() => {
+    if (searchResults && searchResults.length > 0) {
       const topResult = searchResults[0];
       setHighlighted({
         id: topResult.item.id,
         type: topResult.item.type
       });
       playSearchSound();
-    } else {
+    } else if (searchTerm.trim() === '') {
       setHighlighted(null);
     }
+  }, [searchResults, searchTerm, playSearchSound]);
 
-    // 検索の追跡
-    if (term.length >= 2) {
-      trackSearch(term, searchResults.length);
-    }
-  };
-
+  // 表示アイテムの計算
   const layoutItems = useMemo(() => {
     if (searchResults) {
-      return searchResults.map(({ type, item }) => (
+      return searchResults.map(({ item }) => (
         <EnhancedContentItem
-          key={`${type}-${item.id}`}
-          type={type}
-          data={item}
-          isHighlighted={highlighted?.id === item.id && highlighted?.type === type}
-          onClick={() => {
-            // 作品閲覧の追跡
-            if (type === 'artwork') {
-              trackArtworkView(item.title || '', type);
-            }
-          }}
+          key={`${item.type}-${item.id}`}
+          type={item.type}
+          data={item.originalData}
+          isHighlighted={highlighted?.id === item.id && highlighted?.type === item.type}
         />
       ));
     }
@@ -267,72 +283,62 @@ export default function HomeComponent() {
           type="artwork"
           data={artwork}
           isHighlighted={highlighted?.id === artwork.id && highlighted?.type === 'artwork'}
-          onClick={() => trackArtworkView(artwork.title, 'artwork')}
         />
       )),
       ...members.map(member => (
         <EnhancedContentItem
           key={`member-${member.id}`}
           type="member"
-          data={member}
+          data={{
+            ...member,
+            description: member.bio // bioをdescriptionとしてマッピング
+          }}
           isHighlighted={highlighted?.id === member.id && highlighted?.type === 'member'}
-          onClick={() => trackArtworkView(member.name, 'member')}
         />
       )),
       ...mediaArticles.map(article => (
         <EnhancedContentItem
           key={`media-${article.id}`}
           type="media"
-          data={article}
+          data={{
+            ...article,
+            description: article.title // titleをdescriptionとしてマッピング
+          }}
           isHighlighted={highlighted?.id === article.id && highlighted?.type === 'media'}
-          onClick={() => trackArtworkView(article.title, 'media')}
         />
       ))
     ];
-  }, [searchResults, highlighted]);
+  }, [highlighted, searchResults]);
 
   // ギャラリーページを表示する場合
   if (showGallery) {
     return <GalleryPage onBack={handleBackFromGallery} />;
   }
 
-  // モバイル版の場合は無限スクロールレイアウトを表示
+  // モバイル版レイアウト
   if (isMobile) {
     return (
-      <div className={`min-h-screen bg-black text-white transition-opacity duration-500 ${
-        isPageLoaded ? 'opacity-100' : 'opacity-0'
-      }`}>
-        {/* 背景を最初から表示 */}
-        <div className="fixed inset-0 pointer-events-none z-0">
-          <div className="absolute inset-0 bg-black"></div>
-          <div className="absolute inset-0 bg-[url('/stars.png')] opacity-30 animate-twinkle"></div>
-          <div className="absolute inset-0 bg-gradient-radial from-transparent to-black"></div>
-        </div>
-
-        {/* 固定ヘッダー */}
-        <div className={`fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-700 transition-all duration-700 ${
-          isPageLoaded ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
-        }`}>
-          <div className="px-2 py-6">
-            <SearchHeader
-              onSearch={handleSearch}
-              onGalleryClick={handleGalleryClick}
-            />
-          </div>
-        </div>
-
-        {/* メインコンテンツ */}
-        <div className="pt-36">
+      <div className="min-h-screen bg-black text-white">
+        <div className="container mx-auto px-2 md:px-4 py-4 md:py-8">
+          <SearchHeader
+            onSearch={handleSearch}
+            onGalleryClick={handleGalleryClick}
+          />
           <InfiniteScrollLayout searchHighlightInfo={highlighted} />
+        </div>
+
+        <div className="fixed inset-0 pointer-events-none">
+          <div className="absolute inset-0 bg-[url('/stars.png')] opacity-50 animate-twinkle"></div>
+          <div className="absolute inset-0 bg-gradient-radial from-transparent to-black"></div>
         </div>
 
         <style jsx global>{`
           @keyframes twinkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.05); }
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
           }
           .animate-twinkle {
-            animation: twinkle 8s ease-in-out infinite;
+            animation: twinkle 5s ease-in-out infinite;
           }
         `}</style>
       </div>

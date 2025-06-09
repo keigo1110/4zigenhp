@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { ExternalLink } from 'lucide-react';
 import { MediaCard } from './MediaCard';
+import { trackArtworkView } from '@/lib/analytics';
 
 interface CardBaseProps {
   onClick: () => void;
@@ -34,9 +35,18 @@ interface Artwork {
 export function ArtworkCard({ artwork }: { artwork: Artwork }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleCardClick = () => {
+    setIsOpen(true);
+    trackArtworkView(artwork.title, 'artwork');
+  };
+
+  const handleLinkClick = () => {
+    trackArtworkView(`${artwork.title}_external_link`, 'artwork');
+  };
+
   return (
     <>
-      <CardBase onClick={() => setIsOpen(true)}>
+      <CardBase onClick={handleCardClick}>
         <div className="space-y-2">
           <Image
             src={artwork.image}
@@ -69,6 +79,7 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
               href={artwork.link}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleLinkClick}
               className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300"
             >
               <span className="text-sm md:text-base">詳細を見る</span>
@@ -92,9 +103,18 @@ interface Member {
 export function MemberCard({ member }: { member: Member }) {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const handleCardClick = () => {
+    setIsOpen(true);
+    trackArtworkView(member.name, 'member');
+  };
+
+  const handleLinkClick = () => {
+    trackArtworkView(`${member.name}_profile_link`, 'member');
+  };
+
   return (
     <>
-      <CardBase onClick={() => setIsOpen(true)}>
+      <CardBase onClick={handleCardClick}>
         <div className="space-y-2">
           <Image
             src={member.image}
@@ -132,6 +152,7 @@ export function MemberCard({ member }: { member: Member }) {
                 href={member.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={handleLinkClick}
                 className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300 mt-2"
               >
                 <span className="text-sm md:text-base">プロフィールを見る</span>
