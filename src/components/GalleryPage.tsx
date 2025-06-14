@@ -7,6 +7,7 @@ import { artworks, members } from './data';
 
 interface GalleryPageProps {
   onBack: () => void;
+  initialTab?: 'all' | 'artworks' | 'members' | null;
 }
 
 // Fisher-Yates シャッフルアルゴリズム
@@ -19,8 +20,8 @@ function shuffleArray<T>(array: T[]): T[] {
   return shuffled;
 }
 
-export default function GalleryPage({ onBack }: GalleryPageProps) {
-  const [activeTab, setActiveTab] = useState<'all' | 'artworks' | 'members'>('all');
+export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
+  const [activeTab, setActiveTab] = useState<'all' | 'artworks' | 'members'>(initialTab || 'all');
   const [isLoaded, setIsLoaded] = useState(false);
   const [shuffledArtworks, setShuffledArtworks] = useState<typeof artworks>([]);
   const [shuffledMembers, setShuffledMembers] = useState<typeof members>([]);
@@ -82,7 +83,17 @@ export default function GalleryPage({ onBack }: GalleryPageProps) {
               ].map(({ key, label }) => (
                 <button
                   key={key}
-                  onClick={() => setActiveTab(key as any)}
+                  onClick={() => {
+                    setActiveTab(key as any);
+                    // URLパラメータを更新
+                    const url = new URL(window.location.href);
+                    if (key === 'all') {
+                      url.searchParams.delete('tab');
+                    } else {
+                      url.searchParams.set('tab', key);
+                    }
+                    window.history.replaceState({}, '', url.toString());
+                  }}
                   className={`text-sm font-medium tracking-wide transition-all duration-300 ${
                     activeTab === key
                       ? 'text-white border-b border-purple-400 pb-1'

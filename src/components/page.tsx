@@ -46,6 +46,15 @@ export default function HomeComponent() {
     }
   }, [audio]);
 
+  // URLクエリパラメータからギャラリー状態を初期化
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const galleryParam = urlParams.get('gallery');
+    if (galleryParam === 'true') {
+      setShowGallery(true);
+    }
+  }, []);
+
   // モバイル判定とページロード状態
   useEffect(() => {
     const checkIsMobile = () => {
@@ -63,6 +72,15 @@ export default function HomeComponent() {
 
     window.addEventListener('clearSearch', handleClearSearch);
 
+    // ブラウザの戻る/進むボタンへの対応
+    const handlePopState = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const galleryParam = urlParams.get('gallery');
+      setShowGallery(galleryParam === 'true');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
     // ページロード完了を少し遅延させて自然に
     const loadTimeout = setTimeout(() => {
       setIsPageLoaded(true);
@@ -71,6 +89,7 @@ export default function HomeComponent() {
     return () => {
       window.removeEventListener('resize', checkIsMobile);
       window.removeEventListener('clearSearch', handleClearSearch);
+      window.removeEventListener('popstate', handlePopState);
       clearTimeout(loadTimeout);
     };
   }, []);
@@ -89,11 +108,19 @@ export default function HomeComponent() {
   // ギャラリーページの表示切り替え
   const handleGalleryClick = () => {
     setShowGallery(true);
+    // URLにギャラリーパラメータを追加
+    const url = new URL(window.location.href);
+    url.searchParams.set('gallery', 'true');
+    window.history.pushState({}, '', url.toString());
     trackGalleryInteraction('open', 'gallery_page');
   };
 
   const handleBackFromGallery = () => {
     setShowGallery(false);
+    // URLからギャラリーパラメータを削除
+    const url = new URL(window.location.href);
+    url.searchParams.delete('gallery');
+    window.history.pushState({}, '', url.toString());
     trackGalleryInteraction('close', 'gallery_page');
   };
 
@@ -303,7 +330,11 @@ export default function HomeComponent() {
 
   // ギャラリーページを表示する場合
   if (showGallery) {
-    return <GalleryPage onBack={handleBackFromGallery} />;
+    // URLパラメータからタブ情報を取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab') as 'all' | 'artworks' | 'members' | null;
+
+    return <GalleryPage onBack={handleBackFromGallery} initialTab={tabParam} />;
   }
 
   // モバイル版レイアウト
