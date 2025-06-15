@@ -174,6 +174,49 @@ export const artworks = [
       // 検索フレーズ
       "触ると動く作品", "原生生物 ロボット", "生命的な機械", "バイオインスパイア"
     ]
+  },
+  {
+    id: 8,
+    title: "Edge of Bubbles",
+    image: "/works/eob.png?height=300&width=300",
+    description: "波打ち際のように揺れ動くシャボン塊",
+    link: "https://keigo1110.github.io/edgeofbubbles/",
+    searchTerms: [
+      // 作品名バリエーション
+      "Edge of Bubbles", "エッジオブバブルズ", "edge of bubbles", "エッジ・オブ・バブルズ",
+      "EOB", "eob", "バブルズエッジ", "泡の縁",
+      // シャボン玉・泡関連
+      "シャボン玉", "シャボン塊", "soap bubble", "bubble", "バブル", "泡", "foam",
+      "泡沫", "あわ", "bubble art", "soap art", "シャボン", "shabondama",
+      // 波・水関連
+      "波", "wave", "波打ち際", "なみうちぎわ", "shore", "coastline", "水辺",
+      "海岸", "beach", "水面", "water surface", "ripple", "さざ波",
+      // 動き・表現
+      "揺れ動く", "ゆれうごく", "oscillation", "fluctuation", "動的",
+      "流動的", "fluid", "organic movement", "自然な動き", "波動",
+      // 境界・エッジ
+      "境界", "boundary", "edge", "エッジ", "縁", "境目", "インターフェース",
+      "曖昧な境界", "あいまい", "グラデーション", "transition",
+      // 視覚効果・現象
+      "立体物", "3D", "three dimensional", "空間", "space", "volume",
+      "透明感", "transparency", "光", "light", "屈折", "refraction",
+      // 生成・消滅
+      "生成", "generation", "創出", "消滅", "disappear", "emerge",
+      "湧き上がる", "わきあがる", "ephemeral", "一時的", "temporary",
+      // 感情・体験
+      "期待感", "緊張感", "心地よい", "驚き", "予期せぬ", "unexpected",
+      "調和", "harmony", "欲求", "名残", "調和", "balance",
+      // アート・技術
+      "インスタレーション", "installation", "インタラクティブアート", "interactive art",
+      "メディアアート", "media art", "デジタルアート", "digital art",
+      "ジェネラティブアート", "generative art", "アルゴリズミック",
+      // 物理・現象
+      "表面張力", "surface tension", "物理現象", "physics", "流体力学",
+      "fluid dynamics", "シミュレーション", "simulation",
+      // 検索フレーズ
+      "シャボン玉 アート", "波のような動き", "泡のインスタレーション",
+      "液体的な表現", "有機的な動き", "境界の曖昧さ", "ephemeral art"
+    ]
   }
 ];
 
