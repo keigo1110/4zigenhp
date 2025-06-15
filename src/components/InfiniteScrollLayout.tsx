@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { artworks, members } from './data';
 import EnhancedContentItem from './DetailCards';
-import { X, Search } from 'lucide-react';
+import { X, Search, Twitter } from 'lucide-react';
 
 interface HighlightInfo {
   id: number;
@@ -343,7 +343,19 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
       {/* 固定フッター */}
       <div className="fixed bottom-0 left-0 right-0 z-40 bg-gray-900/90 backdrop-blur-sm border-t border-gray-700">
         <div className="px-4 py-2">
-          <p className="text-center text-xs text-gray-500">© 2025 4ZIGEN All Rights Reserved.</p>
+          <div className="flex items-center justify-center gap-4">
+            <p className="text-xs text-gray-500">© 2025 4ZIGEN All Rights Reserved.</p>
+            <a
+              href="https://x.com/4ZIGENGSii"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-gray-500 hover:text-gray-400 transition-colors duration-300"
+              aria-label="4ZIGENのTwitterアカウント"
+            >
+              <Twitter size={10} />
+              <span className="text-xs">@4ZIGENGSii</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>

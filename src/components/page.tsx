@@ -8,6 +8,7 @@ import { artworks, members, mediaArticles } from './data';
 import EnhancedContentItem from './DetailCards';
 import { SearchHeader } from './SearchHeader';
 import { trackSearch, trackArtworkView, trackGalleryInteraction } from '@/lib/analytics';
+import { X, Search, LayoutGrid, Twitter } from 'lucide-react';
 
 interface HighlightInfo {
   id: number;
@@ -408,8 +409,20 @@ export default function HomeComponent() {
         <footer className="mt-16 pb-4 text-center text-xs text-gray-600 opacity-60">
           <p>© {new Date().getFullYear()} 4ZIGEN All Rights Reserved.</p>
           <address className="not-italic mt-2">
-            Contact: <a href="mailto:contact@4zigen.com">contact@4zigen.com</a>
+            Contact: <a href="mailto:kamashigsii@gmail.com">kamashigsii@gmail.com</a>
           </address>
+          <div className="mt-3">
+            <a
+              href="https://x.com/4ZIGENGSii"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-gray-600 hover:text-gray-400 transition-colors duration-300"
+              aria-label="4ZIGENのTwitterアカウント"
+            >
+              <Twitter size={12} />
+              <span className="text-xs">@4ZIGENGSii</span>
+            </a>
+          </div>
         </footer>
       </div>
 

@@ -259,7 +259,7 @@ export const members = [
   {
     id: 4,
     name: "南田桂吾",
-    role: "hogehoge",
+    role: "ホームページ芸人",
     image: "/members/minamida.jpg?height=200&width=200",
     bio: "しょうねん←→おじさん",
     link: "https://keigominamida.com/",
@@ -268,7 +268,7 @@ export const members = [
       "南田桂吾", "みなみだけいご", "ミナミダケイゴ", "Minamida Keigo",
       "minamida keigo", "Keigo Minamida", "keigo minamida",
       // 特徴的なフレーズ
-      "hogehoge", "ホゲホゲ", "しょうねん", "おじさん", "少年おじさん",
+      "ホームページ芸人", "しょうねん", "おじさん", "少年おじさん",
       // プログラミング・技術
       "プログラマー", "programmer", "エンジニア", "engineer", "開発者", "developer",
       "ソフトウェアエンジニア", "software engineer", "フルスタック", "full stack",

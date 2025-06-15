@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Twitter } from 'lucide-react';
 import Image from 'next/image';
 import { artworks, members } from './data';
 
@@ -262,10 +262,22 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
         {/* フッター */}
         <footer className="border-t border-gray-800/30 mt-40">
           <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
-            <div className="text-center">
+            <div className="text-center space-y-4">
               <p className="text-xs text-gray-600 uppercase tracking-[0.2em]">
                 © 2025 — Exhibition Gallery
               </p>
+              <div>
+                <a
+                  href="https://x.com/4ZIGENGSii"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-400 transition-colors duration-300"
+                  aria-label="4ZIGENのTwitterアカウント"
+                >
+                  <Twitter size={14} />
+                  <span className="text-xs tracking-wide">@4ZIGENGSii</span>
+                </a>
+              </div>
             </div>
           </div>
         </footer>

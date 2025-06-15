@@ -6,8 +6,8 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "4ZIGEN | 東京大学発 ワクワククリエイター集団 - デジタルファブリケーション・メディアアート",
-  description: "4ZIGENは東京大学の学生によるものづくり集団です。CottonSketchPen、Geocussion、Protophysica等の革新的な作品を通じて、デジタルファブリケーション、インタラクティブアート、メディアアートの新たな可能性を探求しています。",
+  title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
+  description: "4ZIGENは東京大学の大学院生によるものづくり集団です。おもしろい、ワクワクする、心震える革新的なアイデアを形にして、デジタルファブリケーション、インタラクティブアート、メディアアートの新たな可能性を探求しています。",
   keywords: [
     // コア情報
     "4ZIGEN", "四次元", "東京大学", "ものづくり", "学生サークル", "クリエイター集団",
@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     ],
     locale: "ja_JP",
     type: "website",
-    emails: ["contact@4zigen.com"],
+    emails: ["kamashigsii@gmail.com"],
   },
   twitter: {
     card: "summary_large_image",
@@ -236,7 +236,7 @@ export default function RootLayout({
                   name: "南田桂吾",
                   givenName: "桂吾",
                   familyName: "南田",
-                  jobTitle: "hogehoge",
+                  jobTitle: "ホームページ芸人",
                   description: "しょうねん←→おじさん",
                   sameAs: "https://keigominamida.com/"
                 }
