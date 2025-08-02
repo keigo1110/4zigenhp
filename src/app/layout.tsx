@@ -8,6 +8,16 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
   description: "4ZIGENは東京大学の学生によるものづくり集団です。おもしろい、ワクワクする、心震える革新的なアイデアを形にして、デジタルファブリケーション、インタラクティブアート、メディアアートの新たな可能性を探求しています。",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
   keywords: [
     // コア情報
     "4ZIGEN", "四次元", "東京大学", "ものづくり", "学生サークル", "クリエイター集団",
