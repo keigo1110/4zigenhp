@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next'
 import { artworks, members, mediaArticles } from '@/components/data'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://4zigen.vercel.app'
+  const baseUrl = 'https://4zigen.xyz'
 
   // ベースページ
   const routes = [

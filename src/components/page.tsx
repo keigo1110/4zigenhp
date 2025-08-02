@@ -393,6 +393,28 @@ export default function HomeComponent() {
             </article>
           ))}
         </section>
+        <section aria-label="作品詳細">
+          <h2>4ZIGENの作品</h2>
+          <ul>
+            <li><strong>CottonSketchPen</strong> - 必要な時に必要なものを創り出す世界をつくりたい。綿を使ったオンデマンド製造システム。</li>
+            <li><strong>Geocussion</strong> - 必要な時に必要な音を作り出すことができる。砂場楽器によるインタラクティブ音楽制作。</li>
+            <li><strong>Protophysica</strong> - 新たな制作の可能性を広げる。スーパーキャパシタを使った物理現象の可視化。</li>
+            <li><strong>Metransfer</strong> - 波、泡沫、鼓動。toioを使ったシャボン玉のインタラクティブインスタレーション。</li>
+            <li><strong>Puflica</strong> - ドスン，ビュン，ストン，プカプカ。傘袋を使った浮遊するキネティックアート。</li>
+            <li><strong>覗香</strong> - 香りを拡張する。嗅覚デバイスによる感覚拡張体験。</li>
+            <li><strong>Protozoa</strong> - 触れたら動き出す原生機械種。触覚センサーを使った人工生命体。</li>
+            <li><strong>Edge of Bubbles</strong> - 波打ち際のように揺れ動くシャボン塊。ジェネラティブアートによる境界の表現。</li>
+          </ul>
+        </section>
+        <section aria-label="メンバー詳細">
+          <h2>4ZIGENメンバー</h2>
+          <ul>
+            <li><strong>岡空来</strong> - 純正東大生。修行中。東京大学の学生アーティスト。</li>
+            <li><strong>金澤政宜</strong> - つくってワイワイ。すーぱーえくすぱんど！！！メイカー、プロトタイパー。</li>
+            <li><strong>中田裕紀</strong> - ぐわぐわ〜。やるっしょ。インタラクションデザイナー、UXデザイナー。</li>
+            <li><strong>南田桂吾</strong> - ホームページ芸人。しょうねん←→おじさん。クリエイティブエンジニア、プログラマー。</li>
+          </ul>
+        </section>
       </div>
 
       <div className="container mx-auto px-2 md:px-4 py-4 md:py-8 relative z-10">

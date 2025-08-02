@@ -58,10 +58,10 @@ Allow: /
 Crawl-delay: 1
 
 # サイトマップの場所
-Sitemap: https://4zigen.vercel.app/sitemap.xml
+Sitemap: https://4zigen.xyz/sitemap.xml
 
 # 4ZIGENについて
 # 東京大学の学生によるワクワクものづくり集団
 # デジタルファブリケーション、メディアアート、インタラクティブアート、スタートアップ、起業、研究、HCI
-# 作品: CottonSketchPen, Geocussion, Protophysica, Metransfer, Puflica, 覗香, Protozoa
+# 作品: CottonSketchPen, Geocussion, Protophysica, Metransfer, Puflica, 覗香, Protozoa, Edge of Bubbles
 # メンバー: 岡空来, 金澤政宜, 中田裕紀, 南田桂吾

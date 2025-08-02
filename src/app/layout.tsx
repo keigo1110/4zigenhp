@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
-  description: "4ZIGENは東京大学の大学院生によるものづくり集団です。おもしろい、ワクワクする、心震える革新的なアイデアを形にして、デジタルファブリケーション、インタラクティブアート、メディアアートの新たな可能性を探求しています。",
+  description: "4ZIGENは東京大学の学生によるものづくり集団です。おもしろい、ワクワクする、心震える革新的なアイデアを形にして、デジタルファブリケーション、インタラクティブアート、メディアアートの新たな可能性を探求しています。",
   keywords: [
     // コア情報
     "4ZIGEN", "四次元", "東京大学", "ものづくり", "学生サークル", "クリエイター集団",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     "デジタルファブリケーション", "メディアアート", "インタラクティブアート", "プロトタイピング",
     "HCI", "Human Computer Interaction", "IoT", "電子工作", "Arduino",
     // 作品名
-    "CottonSketchPen", "Geocussion", "Protophysica", "Metransfer", "Puflica", "覗香", "Protozoa",
+    "CottonSketchPen", "Geocussion", "Protophysica", "Metransfer", "Puflica", "覗香", "Protozoa", "Edge of Bubbles",
     // 概念・体験
     "社会実装", "ワクワク", "アーティスト", "イノベーション", "創造性", "体験デザイン",
     // 学術・教育
@@ -37,8 +37,8 @@ export const metadata: Metadata = {
   classification: "Creative Technology, Digital Art, Interactive Media",
   openGraph: {
     title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
-    description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。CottonSketchPen、Geocussion等の革新的作品を展開中。",
-    url: "https://4zigen.vercel.app",
+    description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。",
+    url: "https://4zigen.xyz",
     siteName: "4ZIGEN",
     images: [
       {
@@ -69,8 +69,8 @@ export const metadata: Metadata = {
     title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
     description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。CottonSketchPen、Geocussion等の革新的作品を展開中。",
     images: ["/og-image.jpg"],
-    creator: "@4ZIGEN",
-    site: "@4ZIGEN",
+    creator: "@4ZIGENGSii",
+    site: "@4ZIGENGSii",
   },
   robots: {
     index: true,
@@ -86,10 +86,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://4zigen.vercel.app",
+    canonical: "https://4zigen.xyz",
     languages: {
-      'ja': 'https://4zigen.vercel.app',
-      'en': 'https://4zigen.vercel.app/en',
+      'ja': 'https://4zigen.xyz',
+      'en': 'https://4zigen.xyz/en',
     },
   },
   verification: {
@@ -99,7 +99,7 @@ export const metadata: Metadata = {
       "msvalidate.01": "bing-verification-code-here",
     },
   },
-  metadataBase: new URL('https://4zigen.vercel.app'),
+  metadataBase: new URL('https://4zigen.xyz'),
 }
 
 export default function RootLayout({
@@ -162,17 +162,17 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Organization",
-              "@id": "https://4zigen.vercel.app/#organization",
+              "@id": "https://4zigen.xyz/#organization",
               name: "4ZIGEN",
               alternateName: ["四次元", "よじげん"],
-              url: "https://4zigen.vercel.app",
+              url: "https://4zigen.xyz",
               logo: {
                 "@type": "ImageObject",
-                url: "https://4zigen.vercel.app/logo.png",
+                url: "https://4zigen.xyz/logo.png",
                 width: "200",
                 height: "200"
               },
-              image: "https://4zigen.vercel.app/og-image.jpg",
+              image: "https://4zigen.xyz/og-image.jpg",
               description: "4ZIGENは東京大学の学生によるものづくり集団です。デジタルファブリケーション、メディアアート、インタラクティブアートの分野で革新的な作品を制作しています。",
               foundingDate: "2020",
               foundingLocation: {
@@ -192,7 +192,7 @@ export default function RootLayout({
                 "3Dプリンティング", "レーザーカッター", "プロダクトデザイン"
               ],
               sameAs: [
-                "https://twitter.com/4ZIGEN",
+                "https://twitter.com/4ZIGENGSii",
                 "https://www.instagram.com/4zigen_official/",
                 "https://github.com/4zigen"
               ],
@@ -253,12 +253,12 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "CreativeWorkSeries",
-              "@id": "https://4zigen.vercel.app/#works",
+              "@id": "https://4zigen.xyz/#works",
               name: "4ZIGEN作品集",
               description: "デジタルファブリケーションとメディアアートを融合した革新的作品群",
               creator: {
                 "@type": "Organization",
-                "@id": "https://4zigen.vercel.app/#organization"
+                "@id": "https://4zigen.xyz/#organization"
               },
               hasPart: [
                 {
@@ -266,7 +266,7 @@ export default function RootLayout({
                   name: "CottonSketchPen",
                   description: "必要な時に必要なものを創り出す世界をつくりたい。",
                   url: "https://cotton-sketch-pen-hp.vercel.app/",
-                  image: "https://4zigen.vercel.app/works/cottonsketchgan.jpg",
+                  image: "https://4zigen.xyz/works/cottonsketchgan.jpg",
                   genre: ["デジタルファブリケーション", "インタラクティブアート"],
                   keywords: ["綿", "わたあめ機", "オンデマンド製造", "creative tools"]
                 },
@@ -275,7 +275,7 @@ export default function RootLayout({
                   name: "Geocussion",
                   description: "必要な時に必要な音を作り出すことができる。",
                   url: "https://geohp.vercel.app/",
-                  image: "https://4zigen.vercel.app/works/geophoto.jpeg",
+                  image: "https://4zigen.xyz/works/geophoto.jpeg",
                   genre: ["サウンドアート", "インタラクティブ楽器"],
                   keywords: ["砂場楽器", "位置情報", "音楽制作", "GPS"]
                 },
@@ -284,9 +284,54 @@ export default function RootLayout({
                   name: "Protophysica",
                   description: "新たな制作の可能性を広げる。",
                   url: "https://protophysicahp.vercel.app/",
-                  image: "https://4zigen.vercel.app/works/super.jpeg",
+                  image: "https://4zigen.xyz/works/super.jpeg",
                   genre: ["テクノロジーアート", "物理学アート"],
                   keywords: ["スーパーキャパシタ", "電子部品", "飛行", "エネルギー"]
+                },
+                {
+                  "@type": "CreativeWork",
+                  name: "Metransfer",
+                  description: "波、泡沫、鼓動",
+                  url: "https://metransferhp.vercel.app/",
+                  image: "https://4zigen.xyz/works/metransfer.png",
+                  genre: ["インスタレーション", "インタラクティブアート"],
+                  keywords: ["toio", "シャボン玉", "リズム", "パフォーマンス"]
+                },
+                {
+                  "@type": "CreativeWork",
+                  name: "Puflica",
+                  description: "ドスン，ビュン，ストン，プカプカ．",
+                  url: "https://puflicahp.vercel.app/",
+                  image: "https://4zigen.xyz/works/puflica.png",
+                  genre: ["キネティックアート", "インフレータブルアート"],
+                  keywords: ["傘袋", "浮遊", "空気", "軽やか"]
+                },
+                {
+                  "@type": "CreativeWork",
+                  name: "覗香",
+                  description: "香りを拡張する",
+                  url: "https://nozohp.vercel.app/",
+                  image: "https://4zigen.xyz/works/nozo.jpg",
+                  genre: ["感覚アート", "体験デザイン"],
+                  keywords: ["香り", "嗅覚", "センサー", "拡張現実"]
+                },
+                {
+                  "@type": "CreativeWork",
+                  name: "Protozoa",
+                  description: "触れたら動き出す原生機械種",
+                  url: "https://protozoahp.vercel.app/",
+                  image: "https://4zigen.xyz/works/wat.png",
+                  genre: ["バイオアート", "人工生命"],
+                  keywords: ["原生生物", "触覚", "機械", "生命体"]
+                },
+                {
+                  "@type": "CreativeWork",
+                  name: "Edge of Bubbles",
+                  description: "波打ち際のように揺れ動くシャボン塊",
+                  url: "https://keigo1110.github.io/edgeofbubbles/",
+                  image: "https://4zigen.xyz/works/eob.png",
+                  genre: ["ジェネラティブアート", "インスタレーション"],
+                  keywords: ["シャボン玉", "波", "境界", "ephemeral"]
                 }
               ]
             })
@@ -301,14 +346,14 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
-              "@id": "https://4zigen.vercel.app/#website",
+              "@id": "https://4zigen.xyz/#website",
               name: "4ZIGEN",
-              url: "https://4zigen.vercel.app",
+              url: "https://4zigen.xyz",
               description: "東京大学発のクリエイター集団による革新的作品ポートフォリオ",
               inLanguage: "ja",
               isPartOf: {
                 "@type": "Organization",
-                "@id": "https://4zigen.vercel.app/#organization"
+                "@id": "https://4zigen.xyz/#organization"
               },
               about: {
                 "@type": "Thing",
@@ -321,7 +366,7 @@ export default function RootLayout({
               ],
               potentialAction: {
                 "@type": "SearchAction",
-                target: "https://4zigen.vercel.app/?search={search_term_string}",
+                target: "https://4zigen.xyz/?search={search_term_string}",
                 "query-input": "required name=search_term_string"
               }
             })
@@ -336,7 +381,7 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "EducationalOrganization",
-              "@id": "https://4zigen.vercel.app/#education",
+              "@id": "https://4zigen.xyz/#education",
               name: "4ZIGEN Educational Initiative",
               description: "デジタルファブリケーション技術とアート制作の教育普及活動",
               educationalLevel: "University",
