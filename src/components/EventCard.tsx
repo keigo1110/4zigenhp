@@ -1,12 +1,18 @@
-// MediaCard.tsx
+// EventCard.tsx
 import React from 'react';
 import Image from 'next/image';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ExternalLink, Calendar, Play } from 'lucide-react';
+import { ExternalLink, Calendar, Play, Star } from 'lucide-react';
 import { trackArtworkView } from '@/lib/analytics';
 import { YouTubeEmbed } from './YouTubeEmbed';
 
-interface MediaArticle {
+interface EventWork {
+  title: string;
+  description: string;
+  image: string;
+}
+
+interface Event {
   id: number;
   title: string;
   source: string;
@@ -15,29 +21,21 @@ interface MediaArticle {
   image: string;
   youtubeVideoId?: string;
   description?: string;
-  sparkAwardWorks?: Array<{
-    title: string;
-    description: string;
-    image: string;
-  }>;
+  sparkAwardWorks?: EventWork[];
 }
 
-interface MediaCardProps {
-  article: MediaArticle;
+interface EventCardProps {
+  event: Event;
   isHighlighted?: boolean;
 }
 
-export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
+export function EventCard({ event, isHighlighted = false }: EventCardProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const isSparkAward = article.title.includes('デジタル学園祭2025アワード') || article.source.includes('S×PARK');
+  const isSparkAward = event.title.includes('S×PARK') && !event.source.includes('EXPO 2025');
 
   const handleCardClick = () => {
     setIsOpen(true);
-    trackArtworkView(article.title, 'media');
-  };
-
-  const handleLinkClick = () => {
-    trackArtworkView(`${article.title}_external_link`, 'media');
+    trackArtworkView(event.title, 'event');
   };
 
   return (
@@ -56,26 +54,26 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <div className="relative">
             <Image
-              src={article.image}
-              alt={article.source}
+              src={event.image}
+              alt={event.source}
               width={200}
               height={200}
               className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover"
             />
-            {article.youtubeVideoId && (
+            {event.youtubeVideoId && (
               <div className="absolute -top-1 -right-1 bg-red-600 rounded-full p-1">
                 <Play size={8} className="text-white" />
               </div>
             )}
             {isSparkAward && (
               <div className="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full p-1">
-                <span className="text-xs text-black font-bold">★</span>
+                <Star size={8} className="text-black" />
               </div>
             )}
           </div>
           <div className="text-center">
             <h3 className="text-xs md:text-sm font-medium text-white line-clamp-1">
-              {article.source}
+              {event.source}
             </h3>
           </div>
         </div>
@@ -84,37 +82,34 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="bg-gray-900 text-white border-gray-800 w-[95vw] md:w-auto max-w-4xl mx-auto max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-xl md:text-2xl font-bold">{article.title}</DialogTitle>
+            <DialogTitle className="text-xl md:text-2xl font-bold">{event.title}</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div className="flex items-start space-x-4">
               <Image
-                src={article.image}
-                alt={article.source}
+                src={event.image}
+                alt={event.source}
                 width={100}
                 height={100}
                 className="w-16 h-16 rounded-lg object-cover"
               />
               <div className="flex-1">
-                <p className="text-purple-400 font-medium">{article.source}</p>
-                <p className="text-sm text-gray-400">{article.date}</p>
-                {isSparkAward && (
-                  <p className="text-sm text-yellow-400 font-medium">★ S×PARKアワード出品作品</p>
-                )}
+                <p className="text-purple-400 font-medium">{event.source}</p>
+                <p className="text-sm text-gray-400">{event.date}</p>
               </div>
             </div>
 
-            {article.description && (
+            {event.description && (
               <DialogDescription className="text-sm md:text-base text-gray-300">
-                {article.description}
+                {event.description}
               </DialogDescription>
             )}
 
-            {article.sparkAwardWorks && (
+            {event.sparkAwardWorks && (
               <div className="space-y-3">
                 <h4 className="text-lg font-semibold text-purple-400">出品作品</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {article.sparkAwardWorks.map((work, index) => (
+                  {event.sparkAwardWorks.map((work, index) => (
                     <div key={index} className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
                       <div className="flex items-center space-x-3 mb-2">
                         <Image
@@ -133,12 +128,12 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
               </div>
             )}
 
-            {article.youtubeVideoId && (
+            {event.youtubeVideoId && (
               <div className="space-y-2">
-                <h4 className="text-lg font-semibold text-purple-400">作品記録動画</h4>
+                <h4 className="text-lg font-semibold text-purple-400">展示記録</h4>
                 <YouTubeEmbed
-                  videoId={article.youtubeVideoId}
-                  title={article.title}
+                  videoId={event.youtubeVideoId}
+                  title={event.title}
                   className="w-full"
                 />
               </div>
@@ -150,13 +145,13 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
   );
 }
 
-// EnhancedContentItem に追加するためのメディア用のラッパーコンポーネント
-export function EnhancedMediaItem({ data, isHighlighted }: { data: MediaArticle, isHighlighted: boolean }) {
+// EnhancedContentItem に追加するためのイベント用のラッパーコンポーネント
+export function EnhancedEventItem({ type, data, isHighlighted }: { type: string, data: Event, isHighlighted: boolean }) {
   return (
     <div className={`w-full h-full rounded-full overflow-hidden transition-all duration-300
       ${isHighlighted ? 'scale-110 shadow-lg ring-2 ring-white' : 'scale-100'}`}
     >
-      <MediaCard article={data} isHighlighted={isHighlighted} />
+      <EventCard event={data} isHighlighted={isHighlighted} />
     </div>
   );
 }

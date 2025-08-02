@@ -5,7 +5,7 @@ import { shuffleArray, getRandomFloat, getRandomVelocity, avoidCollision, update
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member' | 'media';
+  type: 'artwork' | 'member' | 'media' | 'event';
 }
 
 interface DynamicLayoutProps {
@@ -19,12 +19,12 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
   const positionsRef = useRef<ItemPosition[]>([]);
   const animationRef = useRef<number>();
 
-  const getItemInfo = (child: React.ReactNode): { id: number; type: 'artwork' | 'member' | 'media' | 'title' } | null => {
+  const getItemInfo = (child: React.ReactNode): { id: number; type: 'artwork' | 'member' | 'media' | 'event' | 'title' } | null => {
     if (React.isValidElement(child)) {
       if (child.type === 'div' && child.props.className?.includes('text-xl')) {
         return { id: -1, type: 'title' };
       }
-      if (child.props.type === 'artwork' || child.props.type === 'member' || child.props.type === 'media') {
+      if (child.props.type === 'artwork' || child.props.type === 'member' || child.props.type === 'media' || child.props.type === 'event') {
         return {
           id: child.props.data.id,
           type: child.props.type
@@ -41,28 +41,44 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
       const containerWidth = containerRect?.width || 800;
       const containerHeight = containerRect?.height || 600;
 
-      positionsRef.current = shuffledChildren.map(() => ({
-        x: getRandomFloat(0, containerWidth - 150),
-        y: getRandomFloat(0, containerHeight - 150),
-        ...getRandomVelocity(3)
-      }));
+      // レスポンシブ対応：画面サイズに応じて球体サイズを決定
+      const isMobile = window.innerWidth < 768;
+      const sphereSize = isMobile ? 96 : 128; // w-24: 96px, md:w-32: 128px
+
+      positionsRef.current = shuffledChildren.map((child) => {
+        const itemInfo = getItemInfo(child);
+        const isEventOrMedia = itemInfo?.type === 'event' || itemInfo?.type === 'media';
+        const sphereSize = isEventOrMedia ? (isMobile ? 96 : 128) : (isMobile ? 144 : 192);
+
+        return {
+          x: getRandomFloat(0, containerWidth - sphereSize),
+          y: getRandomFloat(0, containerHeight - sphereSize),
+          ...getRandomVelocity(3)
+        };
+      });
 
       updateLayoutItems();
     };
 
     const updateLayoutItems = () => {
-      const newLayoutItems = children.map((child, index) => (
-        <div
-          key={index}
-          className="absolute w-36 md:w-48 h-36 md:h-48"
-          style={{
-            transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
-            transition: searchHighlightInfo !== null ? 'all 0.5s ease-out' : 'none',
-          }}
-        >
-          {child}
-        </div>
-      ));
+      const newLayoutItems = children.map((child, index) => {
+        const itemInfo = getItemInfo(child);
+        const isEventOrMedia = itemInfo?.type === 'event' || itemInfo?.type === 'media';
+        const sphereSizeClass = isEventOrMedia ? "w-24 md:w-32 h-24 md:h-32" : "w-36 md:w-48 h-36 md:h-48";
+
+        return (
+          <div
+            key={index}
+            className={`absolute ${sphereSizeClass}`}
+            style={{
+              transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
+              transition: searchHighlightInfo !== null ? 'all 0.5s ease-out' : 'none',
+            }}
+          >
+            {child}
+          </div>
+        );
+      });
       setLayoutItems(newLayoutItems);
     };
 
@@ -80,11 +96,17 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
     if (!containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
-    const centerX = containerRect.width / 2 - 75;
-    const centerY = containerRect.height / 2 - 75;
+    const isMobile = window.innerWidth < 768;
+    const sphereSize = isMobile ? 96 : 128;
+    const centerX = containerRect.width / 2 - sphereSize / 2;
+    const centerY = containerRect.height / 2 - sphereSize / 2;
 
     positionsRef.current = positionsRef.current.map((position, index) => {
       const itemInfo = getItemInfo(children[index]);
+      const isEventOrMedia = itemInfo?.type === 'event' || itemInfo?.type === 'media';
+      const sphereSize = isEventOrMedia ? (isMobile ? 96 : 128) : (isMobile ? 144 : 192);
+      const centerX = containerRect.width / 2 - sphereSize / 2;
+      const centerY = containerRect.height / 2 - sphereSize / 2;
 
       if (searchHighlightInfo !== null && itemInfo) {
         const matches = searchHighlightInfo !== null && searchHighlightInfo !== undefined &&
@@ -116,11 +138,13 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
     const newLayoutItems = children.map((child, index) => {
       const itemInfo = getItemInfo(child);
       const position = positionsRef.current[index];
+      const isEventOrMedia = itemInfo?.type === 'event' || itemInfo?.type === 'media';
+      const sphereSizeClass = isEventOrMedia ? "w-24 md:w-32 h-24 md:h-32" : "w-36 md:w-48 h-36 md:h-48";
 
       return (
         <div
           key={index}
-          className="absolute w-36 md:w-48 h-36 md:h-48"
+          className={`absolute ${sphereSizeClass}`}
           style={{
             transform: `translate(${position.x}px, ${position.y}px)`,
             transition: 'all 0.5s ease-out',
@@ -174,18 +198,28 @@ export default function DynamicLayout({ children, searchHighlightInfo }: Dynamic
         };
       });
 
-      setLayoutItems(children.map((child, index) => (
-        <div
-          key={index}
-          className="absolute w-36 md:w-48 h-36 md:h-48"
-          style={{
-            transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
-            transition: 'none',
-          }}
-        >
-          {child}
-        </div>
-      )));
+      // レスポンシブ対応：画面サイズに応じて球体サイズを決定
+      const isMobile = window.innerWidth < 768;
+      const sphereSizeClass = isMobile ? "w-24 h-24" : "md:w-32 md:h-32";
+
+      setLayoutItems(children.map((child, index) => {
+        const itemInfo = getItemInfo(child);
+        const isEventOrMedia = itemInfo?.type === 'event' || itemInfo?.type === 'media';
+        const finalSphereSizeClass = isEventOrMedia ? sphereSizeClass : "w-36 md:w-48 h-36 md:h-48";
+
+        return (
+          <div
+            key={index}
+            className={`absolute ${finalSphereSizeClass}`}
+            style={{
+              transform: `translate(${positionsRef.current[index].x}px, ${positionsRef.current[index].y}px)`,
+              transition: 'none',
+            }}
+          >
+            {child}
+          </div>
+        );
+      }));
 
       animationRef.current = requestAnimationFrame(updatePositions);
     };

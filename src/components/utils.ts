@@ -7,7 +7,7 @@ const PHYSICS_PARAMS = {
   FRICTION: 0.998,              // 摩擦係数（1に近いほど減衰が小さい）
 
   // 衝突関連
-  MIN_DISTANCE: 180,            // オブジェクト間の最小距離
+  MIN_DISTANCE: 120,            // オブジェクト間の最小距離
   REPULSION_FORCE: 5,           // 反発力の強さ
   REPULSION_POWER: 1.5,         // 反発力の減衰指数
 
@@ -23,8 +23,11 @@ const PHYSICS_PARAMS = {
   RANDOM_FORCE: 1,              // 常時働くランダム力の最大値
   GRAVITY: 0.001,                // 上向きの疑似重力（正の値で上向き）
 
-  // カードサイズ
-  CARD_SIZE: 192                // カードの大きさ（ピクセル）
+  // カードサイズ（動的に計算）
+  getCardSize: () => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    return isMobile ? 96 : 128; // w-24: 96px, md:w-32: 128px
+  }
 };
 
 // 以下インターフェース定義
@@ -68,7 +71,8 @@ export function getRandomVelocity(maxSpeed: number): Velocity {
 }
 
 export function avoidCollision(position: Position, otherPositions: Position[], containerSize: ContainerSize): Position {
-  const { MIN_DISTANCE, REPULSION_FORCE, REPULSION_POWER, WALL_FORCE, WALL_DISTANCE, RANDOM_FORCE, CARD_SIZE } = PHYSICS_PARAMS;
+  const { MIN_DISTANCE, REPULSION_FORCE, REPULSION_POWER, WALL_FORCE, WALL_DISTANCE, RANDOM_FORCE, getCardSize } = PHYSICS_PARAMS;
+  const CARD_SIZE = getCardSize();
   let { x, y } = position;
   let totalForceX = 0;
   let totalForceY = 0;
@@ -109,8 +113,9 @@ export function avoidCollision(position: Position, otherPositions: Position[], c
 export function updatePosition(position: ItemPosition, containerSize: ContainerSize, deltaTime: number): ItemPosition {
   const {
     FRICTION, BROWNIAN_FORCE, GRAVITY, MAX_SPEED, MIN_SPEED,
-    WALL_BOUNCE, WALL_RANDOM_MIN, WALL_RANDOM_MAX, CARD_SIZE
+    WALL_BOUNCE, WALL_RANDOM_MIN, WALL_RANDOM_MAX, getCardSize
   } = PHYSICS_PARAMS;
+  const CARD_SIZE = getCardSize();
 
   const { x, y, vx, vy } = position;
   const normalizedDelta = Math.min(deltaTime, 2);

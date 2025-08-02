@@ -4,20 +4,21 @@ import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import DynamicLayout from './DynamicLayout';
 import InfiniteScrollLayout from './InfiniteScrollLayout';
 import GalleryPage from './GalleryPage';
-import { artworks, members, mediaArticles } from './data';
+import { artworks, members, mediaArticles, events } from './data';
 import EnhancedContentItem from './DetailCards';
+import { EnhancedEventItem } from './EventCard';
 import { SearchHeader } from './SearchHeader';
 import { trackSearch, trackArtworkView, trackGalleryInteraction } from '@/lib/analytics';
 import { X, Search, LayoutGrid, Twitter } from 'lucide-react';
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member' | 'media';
+  type: 'artwork' | 'member' | 'media' | 'event';
 }
 
 interface SearchableItem {
   id: number;
-  type: 'artwork' | 'member' | 'media';
+  type: 'artwork' | 'member' | 'media' | 'event';
   searchableText: string[];
   originalData: any;
 }
@@ -126,61 +127,50 @@ export default function HomeComponent() {
   };
 
   // 検索可能な項目のインデックスを構築
-  const searchableItems = useMemo<SearchableItem[]>(() => {
-    const items: SearchableItem[] = [];
-
-    // 作品データのインデックス化
-    artworks.forEach(artwork => {
-      items.push({
-        id: artwork.id,
-        type: 'artwork',
-        searchableText: [
-          artwork.title,
-          artwork.description,
-          ...artwork.searchTerms
-        ],
-        originalData: artwork
-      });
-    });
-
-    // メンバーデータのインデックス化
-    members.forEach(member => {
-      items.push({
-        id: member.id,
-        type: 'member',
-        searchableText: [
-          member.name,
-          member.role,
-          member.bio,
-          ...member.searchTerms
-        ],
-        originalData: {
-          ...member,
-          description: member.bio // bioをdescriptionとしてマッピング
-        }
-      });
-    });
-
-    // メディア記事データのインデックス化
-    mediaArticles.forEach(article => {
-      items.push({
-        id: article.id,
-        type: 'media',
-        searchableText: [
-          article.title,
-          article.source,
-          article.date,
-          ...article.searchTerms
-        ],
-        originalData: {
-          ...article,
-          description: article.title // titleをdescriptionとしてマッピング
-        }
-      });
-    });
-
-    return items;
-  }, []);
+  const searchableItems: SearchableItem[] = useMemo(() => [
+    ...artworks.map(artwork => ({
+      id: artwork.id,
+      type: 'artwork' as const,
+      searchableText: [
+        artwork.title,
+        artwork.description,
+        ...artwork.searchTerms
+      ],
+      originalData: artwork
+    })),
+    ...members.map(member => ({
+      id: member.id,
+      type: 'member' as const,
+      searchableText: [
+        member.name,
+        member.role,
+        member.bio,
+        ...member.searchTerms
+      ],
+      originalData: member
+    })),
+    ...mediaArticles.map(article => ({
+      id: article.id,
+      type: 'media' as const,
+      searchableText: [
+        article.title,
+        article.source,
+        article.description || '',
+        ...article.searchTerms
+      ],
+      originalData: article
+    })),
+    ...events.map(event => ({
+      id: event.id,
+      type: 'event' as const,
+      searchableText: [
+        event.title,
+        event.description,
+        ...event.searchTerms
+      ],
+      originalData: event
+    }))
+  ], []);
 
   // 検索結果の計算
   const searchResults = useMemo(() => {
@@ -284,18 +274,31 @@ export default function HomeComponent() {
 
   // 表示アイテムの計算
   const layoutItems = useMemo(() => {
-    if (searchResults) {
-      return searchResults.map(({ item }) => (
-        <EnhancedContentItem
-          key={`${item.type}-${item.id}`}
-          type={item.type}
-          data={item.originalData}
-          isHighlighted={highlighted?.id === item.id && highlighted?.type === item.type}
-        />
-      ));
+    if (searchResults && searchResults.length > 0) {
+      return searchResults.map(result => {
+        if (result.item.type === 'event') {
+          return (
+            <EnhancedEventItem
+              key={`${result.item.type}-${result.item.id}`}
+              type={result.item.type}
+              data={result.item.originalData}
+              isHighlighted={highlighted?.id === result.item.id && highlighted?.type === result.item.type}
+            />
+          );
+        } else {
+          return (
+            <EnhancedContentItem
+              key={`${result.item.type}-${result.item.id}`}
+              type={result.item.type}
+              data={result.item.originalData}
+              isHighlighted={highlighted?.id === result.item.id && highlighted?.type === result.item.type}
+            />
+          );
+        }
+      });
     }
 
-    return [
+    const allItems = [
       ...artworks.map(artwork => (
         <EnhancedContentItem
           key={`artwork-${artwork.id}`}
@@ -325,8 +328,24 @@ export default function HomeComponent() {
           }}
           isHighlighted={highlighted?.id === article.id && highlighted?.type === 'media'}
         />
+      )),
+      ...events.map(event => (
+        <EnhancedEventItem
+          key={`event-${event.id}`}
+          type="event"
+          data={event}
+          isHighlighted={highlighted?.id === event.id && highlighted?.type === 'event'}
+        />
       ))
     ];
+
+    console.log('Total items in layout:', allItems.length);
+    console.log('Artworks:', artworks.length);
+    console.log('Members:', members.length);
+    console.log('Media articles:', mediaArticles.length);
+    console.log('Events:', events.length);
+
+    return allItems;
   }, [highlighted, searchResults]);
 
   // ギャラリーページを表示する場合

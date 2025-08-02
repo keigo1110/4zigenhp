@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     siteName: "4ZIGEN",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/media/4zigen-logo.png",
         width: 1200,
         height: 630,
         alt: "4ZIGEN - 東京大学発ワクワククリエイター集団",
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
     description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。CottonSketchPen、Geocussion等の革新的作品を展開中。",
-    images: ["/og-image.jpg"],
+    images: ["/media/4zigen-logo.png"],
     creator: "@4ZIGENGSii",
     site: "@4ZIGENGSii",
   },
@@ -138,9 +138,9 @@ export default function RootLayout({
         <link rel="manifest" href="/manifest.json" />
 
         {/* Apple Touch Icons */}
-        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/media/4zigen-logo.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/media/4zigen-logo.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/media/4zigen-logo.png" />
 
         {/* Preconnect for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -168,11 +168,11 @@ export default function RootLayout({
               url: "https://4zigen.xyz",
               logo: {
                 "@type": "ImageObject",
-                url: "https://4zigen.xyz/logo.png",
+                url: "https://4zigen.xyz/media/4zigen-logo.png",
                 width: "200",
                 height: "200"
               },
-              image: "https://4zigen.xyz/og-image.jpg",
+              image: "https://4zigen.xyz/media/4zigen-logo.png",
               description: "4ZIGENは東京大学の学生によるものづくり集団です。デジタルファブリケーション、メディアアート、インタラクティブアートの分野で革新的な作品を制作しています。",
               foundingDate: "2020",
               foundingLocation: {

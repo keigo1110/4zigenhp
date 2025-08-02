@@ -329,6 +329,44 @@ export const members = [
   }
 ];
 
+// ーーーーーーーーーイベント・アワードーーーーーーーーー
+export const events = [
+  {
+    id: 1,
+    title: "デジタル学園祭 アワード「S×PARK」",
+    source: "EXPO 2025",
+    date: "2025-07-19,20",
+    link: "https://www.youtube.com/watch?v=I1MXX7waqIA",
+    image: "/media/4zigen-logo.png?height=200&width=200",
+    youtubeVideoId: "I1MXX7waqIA",
+    description: "CottonSketchPen・覗香・Geocussionの3作品をデジタル学園祭 2025のS×PARKアワードに出展しました。展示の様子をYouTubeで公開しています。",
+    sparkAwardWorks: [
+      {
+        title: "CottonSketchPen",
+        description: "必要な時に必要なものを創り出す世界をつくりたい。わたを使った即興ものづくり。",
+        image: "/works/cottonsketchgan.jpg"
+      },
+      {
+        title: "覗香",
+        description: "香りを拡張する。嗅覚虫眼鏡デバイスによる感覚拡張体験。",
+        image: "/works/nozo.jpg"
+      },
+      {
+        title: "Geocussion",
+        description: "イメージをすぐに形にして音を鳴らすことができる。変身可能な楽器。",
+        image: "/works/geophoto.jpeg"
+      }
+    ],
+    searchTerms: [
+      "S×PARK", "SxPARK", "スパーク", "spark", "デジタル学園祭", "digital gakuensai",
+      "CottonSketchPen", "覗香", "Geocussion", "YouTube", "動画", "video",
+      "デジタル学園祭2025", "d-s-festival", "作品記録", "展示", "exhibition",
+      "アワード", "award", "コンテスト", "contest", "大阪", "osaka", "万博", "expo",
+      "作品", "work", "プロジェクト", "project", "記録", "record", "制作過程", "process"
+    ]
+  }
+];
+
 // ーーーーーーーーーメディア記事ーーーーーーーーー
 export const mediaArticles = [
   {
