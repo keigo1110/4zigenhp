@@ -155,7 +155,6 @@ export default function HomeComponent() {
       searchableText: [
         article.title,
         article.source,
-        article.description || '',
         ...article.searchTerms
       ],
       originalData: article

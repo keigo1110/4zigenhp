@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, X, LayoutGrid } from 'lucide-react';
 
 interface SearchHeaderProps {
@@ -9,6 +9,21 @@ interface SearchHeaderProps {
 export function SearchHeader({ onSearch, onGalleryClick }: SearchHeaderProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // 検索クリアイベントのリスナー
+  useEffect(() => {
+    const handleClearSearch = () => {
+      setSearchTerm('');
+      onSearch('');
+      setIsExpanded(false);
+    };
+
+    window.addEventListener('clearSearch', handleClearSearch);
+
+    return () => {
+      window.removeEventListener('clearSearch', handleClearSearch);
+    };
+  }, [onSearch]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

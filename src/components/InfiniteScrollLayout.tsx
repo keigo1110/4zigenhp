@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { artworks, members } from './data';
+import { artworks, members, events } from './data';
 import EnhancedContentItem from './DetailCards';
+import { EnhancedEventItem } from './EventCard';
 import { X, Search, Twitter } from 'lucide-react';
 
 interface HighlightInfo {
   id: number;
-  type: 'artwork' | 'member' | 'media';
+  type: 'artwork' | 'member' | 'media' | 'event';
 }
 
 interface InfiniteScrollLayoutProps {
@@ -25,7 +26,7 @@ const shuffleArray = <T,>(array: T[]): T[] => {
 };
 
 export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteScrollLayoutProps) {
-  const [displayItems, setDisplayItems] = useState<Array<{ type: 'artwork' | 'member'; data: any; key: string }>>([]);
+  const [displayItems, setDisplayItems] = useState<Array<{ type: 'artwork' | 'member' | 'event'; data: any; key: string }>>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [itemsLoadedCount, setItemsLoadedCount] = useState(0);
@@ -51,8 +52,13 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
       data: member
     }));
 
+    const eventItems = events.map(event => ({
+      type: 'event' as const,
+      data: event
+    }));
+
     // シャッフルして無限ループ用の長いリストを作成
-    const baseItems = shuffleArray([...artworkItems, ...memberItems]);
+    const baseItems = shuffleArray([...artworkItems, ...memberItems, ...eventItems]);
     const extendedItems = [];
 
     // 200回繰り返してより長いループ用リストを作成
@@ -196,11 +202,19 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                           bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl p-4 backdrop-blur-sm
                           border border-purple-500/20 shadow-2xl shadow-purple-500/20"
                       >
-                        <EnhancedContentItem
-                          type={item.type}
-                          data={item.data}
-                          isHighlighted={true}
-                        />
+                        {item.type === 'event' ? (
+                          <EnhancedEventItem
+                            type={item.type}
+                            data={item.data}
+                            isHighlighted={true}
+                          />
+                        ) : (
+                          <EnhancedContentItem
+                            type={item.type}
+                            data={item.data}
+                            isHighlighted={true}
+                          />
+                        )}
                       </div>
                     ))}
 
@@ -290,11 +304,19 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                           key={`bg-${item.type}-${item.data.id}`}
                           className="aspect-square transition-all duration-500"
                         >
-                          <EnhancedContentItem
-                            type={item.type}
-                            data={item.data}
-                            isHighlighted={false}
-                          />
+                          {item.type === 'event' ? (
+                            <EnhancedEventItem
+                              type={item.type}
+                              data={item.data}
+                              isHighlighted={false}
+                            />
+                          ) : (
+                            <EnhancedContentItem
+                              type={item.type}
+                              data={item.data}
+                              isHighlighted={false}
+                            />
+                          )}
                         </div>
                       ))}
                   </div>
@@ -312,11 +334,19 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                   animationDelay: index < 20 ? `${(index % 4) * 80}ms` : '0ms'
                 }}
               >
-                <EnhancedContentItem
-                  type={item.type}
-                  data={item.data}
-                  isHighlighted={false}
-                />
+                {item.type === 'event' ? (
+                  <EnhancedEventItem
+                    type={item.type}
+                    data={item.data}
+                    isHighlighted={false}
+                  />
+                ) : (
+                  <EnhancedContentItem
+                    type={item.type}
+                    data={item.data}
+                    isHighlighted={false}
+                  />
+                )}
               </div>
             ))}
           </div>
