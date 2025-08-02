@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { artworks, members, mediaArticles } from '@/components/data'
+import { artworks, members, mediaArticles, events } from '@/components/data'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://4zigen.xyz'
@@ -39,10 +39,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // メディア記事を追加
   const mediaRoutes = mediaArticles.map((article) => ({
     url: article.link,
-    lastModified: new Date(article.date || new Date()),
+    lastModified: new Date(),
     changeFrequency: 'yearly' as const,
     priority: 0.6,
   }))
 
-  return [...routes, ...artworkRoutes, ...memberRoutes, ...mediaRoutes]
+  // イベントを追加
+  const eventRoutes = events.map((event) => ({
+    url: event.link,
+    lastModified: new Date(),
+    changeFrequency: 'yearly' as const,
+    priority: 0.6,
+  }))
+
+  return [...routes, ...artworkRoutes, ...memberRoutes, ...mediaRoutes, ...eventRoutes]
 }

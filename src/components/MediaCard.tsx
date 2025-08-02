@@ -67,6 +67,11 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
                 <Play size={8} className="text-white" />
               </div>
             )}
+            {article.youtubeVideoId && (
+              <div className="absolute -bottom-1 -left-1 bg-red-600 rounded-full p-1">
+                <Play size={8} className="text-white" />
+              </div>
+            )}
             {isSparkAward && (
               <div className="absolute -bottom-1 -right-1 bg-yellow-500 rounded-full p-1">
                 <span className="text-xs text-black font-bold">★</span>
@@ -110,6 +115,18 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
               </DialogDescription>
             )}
 
+            {article.youtubeVideoId && (
+              <div className="space-y-2">
+                <h4 className="text-lg font-semibold text-purple-400">作品記録動画</h4>
+                <div className="text-xs text-gray-500 mb-2">Video ID: {article.youtubeVideoId}</div>
+                <YouTubeEmbed
+                  videoId={article.youtubeVideoId}
+                  title={article.title}
+                  className="w-full"
+                />
+              </div>
+            )}
+
             {article.sparkAwardWorks && (
               <div className="space-y-3">
                 <h4 className="text-lg font-semibold text-purple-400">出品作品</h4>
@@ -133,16 +150,21 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
               </div>
             )}
 
-            {article.youtubeVideoId && (
-              <div className="space-y-2">
-                <h4 className="text-lg font-semibold text-purple-400">作品記録動画</h4>
-                <YouTubeEmbed
-                  videoId={article.youtubeVideoId}
-                  title={article.title}
-                  className="w-full"
-                />
-              </div>
-            )}
+            {/* 外部リンクボタン */}
+            <div className="flex justify-center">
+              <a
+                href={article.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={handleLinkClick}
+                className="inline-flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30
+                  backdrop-blur-sm rounded-full px-6 py-3 border border-purple-500/30
+                  transition-all duration-300 hover:border-purple-500/50 group"
+              >
+                <span className="text-purple-300 text-sm">詳細を見る</span>
+                <ExternalLink size={16} className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+              </a>
+            </div>
           </div>
         </DialogContent>
       </Dialog>

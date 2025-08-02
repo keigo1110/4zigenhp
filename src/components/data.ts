@@ -373,9 +373,11 @@ export const mediaArticles = [
     id: 1,
     title: "東京大学制作展2024",
     source: "東京大学制作展",
-    date: "2024-11-7",
+    date: "2024-11-7~11",
     link: "https://iiiexhibition2024kamashi.vercel.app/",
     image: "/media/light.ico?height=200&width=200",
+    youtubeVideoId: "8nh0nSSK2EM",
+    description: "東京大学の学生による制作展に参加しました。4ZIGENの作品を展示し、多くの方々に作品をご覧いただきました。",
     searchTerms: ["東京大学制作展", "とうきょうだいがくせいさくてん", "", "iiiexhibition", "kamashi"]
   }
 ];
