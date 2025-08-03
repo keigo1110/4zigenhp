@@ -4,7 +4,7 @@ export const artworks = [
     id: 1,
     title: "CottonSketchPen",
     image: "/works/cottonsketchgan.jpg?height=300&width=300",
-    description: "必要な時に必要なものを創り出す世界をつくりたい。",
+    description: "必要な時に必要なものを創り出す世界をつくりたい",
     link: "https://cotton-sketch-pen-hp.vercel.app/",
     searchTerms: [
       // 作品名バリエーション
@@ -26,7 +26,7 @@ export const artworks = [
     id: 2,
     title: "Geocussion",
     image: "/works/geophoto.jpeg?height=300&width=300",
-    description: "必要な時に必要な音を作り出すことができる。",
+    description: "イメージを形にして音を鳴らす変身可能な楽器",
     link: "https://geohp.vercel.app/",
     searchTerms: [
       // 作品名バリエーション
@@ -48,7 +48,7 @@ export const artworks = [
     id: 3,
     title: "Protophysica",
     image: "/works/super.jpeg?height=300&width=300",
-    description: "新たな制作の可能性を広げる。",
+    description: "新たな制作の可能性を広げる",
     link: "https://protophysicahp.vercel.app/",
     searchTerms: [
       // 作品名バリエーション
@@ -353,7 +353,7 @@ export const events = [
       },
       {
         title: "Geocussion",
-        description: "イメージをすぐに形にして音を鳴らすことができる。変身可能な楽器。",
+        description: "イメージをすぐに形にして音を鳴らすことができる変身可能な楽器。",
         image: "/works/geophoto.jpeg"
       }
     ],

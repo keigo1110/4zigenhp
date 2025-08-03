@@ -67,7 +67,7 @@ export const metadata: Metadata = {
         url: "/works/geophoto.jpeg",
         width: 800,
         height: 600,
-        alt: "Geocussion - 必要な時に必要な音を作り出す砂場楽器",
+        alt: "Geocussion - イメージを形にして音を鳴らす変身可能な楽器",
       }
     ],
     locale: "ja_JP",
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "4ZIGEN | 東京大学発 ワクワククリエイター集団",
-    description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。CottonSketchPen、Geocussion等の革新的作品を展開中。",
+    description: "デジタルファブリケーション・メディアアートで新たな可能性を創造する東京大学の学生集団。",
     images: ["/media/4zigen-logo.png"],
     creator: "@4ZIGENGSii",
     site: "@4ZIGENGSii",
@@ -183,7 +183,7 @@ export default function RootLayout({
                 height: "200"
               },
               image: "https://4zigen.xyz/media/4zigen-logo.png",
-              description: "4ZIGENは東京大学の学生によるものづくり集団です。デジタルファブリケーション、メディアアート、インタラクティブアートの分野で革新的な作品を制作しています。",
+              description: "4ZIGENは東京大学の学生によるものづくり集団です。HCI、デジタルファブリケーション、メディアアート、インタラクティブアートの分野で革新的な作品を制作しています。",
               foundingDate: "2020",
               foundingLocation: {
                 "@type": "Place",
@@ -283,7 +283,7 @@ export default function RootLayout({
                 {
                   "@type": "CreativeWork",
                   name: "Geocussion",
-                  description: "必要な時に必要な音を作り出すことができる。",
+                  description: "イメージを形にして音を鳴らす変身可能な楽器",
                   url: "https://geohp.vercel.app/",
                   image: "https://4zigen.xyz/works/geophoto.jpeg",
                   genre: ["サウンドアート", "インタラクティブ楽器"],

@@ -414,14 +414,14 @@ export default function HomeComponent() {
         <section aria-label="作品詳細">
           <h2>4ZIGENの作品</h2>
           <ul>
-            <li><strong>CottonSketchPen</strong> - 必要な時に必要なものを創り出す世界をつくりたい。綿を使ったオンデマンド製造システム。</li>
-            <li><strong>Geocussion</strong> - 必要な時に必要な音を作り出すことができる。砂場楽器によるインタラクティブ音楽制作。</li>
-            <li><strong>Protophysica</strong> - 新たな制作の可能性を広げる。スーパーキャパシタを使った物理現象の可視化。</li>
+            <li><strong>CottonSketchPen</strong> - 必要な時に必要なものを創り出す世界をつくりたい。わたを使った即興ものづくりデバイス。</li>
+            <li><strong>Geocussion</strong> - イメージを形にして音を鳴らす変身可能な砂場楽器による音楽制作。</li>
+            <li><strong>Protophysica</strong> - エネルギーを制作の可能性を広げる。スーパーキャパシタを使って最小飛翔体の制作。</li>
             <li><strong>Metransfer</strong> - 波、泡沫、鼓動。toioを使ったシャボン玉のインタラクティブインスタレーション。</li>
             <li><strong>Puflica</strong> - ドスン，ビュン，ストン，プカプカ。傘袋を使った浮遊するキネティックアート。</li>
             <li><strong>覗香</strong> - 香りを拡張する。嗅覚デバイスによる感覚拡張体験。</li>
-            <li><strong>Protozoa</strong> - 触れたら動き出す原生機械種。触覚センサーを使った人工生命体。</li>
-            <li><strong>Edge of Bubbles</strong> - 波打ち際のように揺れ動くシャボン塊。ジェネラティブアートによる境界の表現。</li>
+            <li><strong>Protozoa</strong> - 触れたら動き出す原生機械種。エネルギー工作を可能にする。</li>
+            <li><strong>Edge of Bubbles</strong> - 波打ち際のように揺れ動くシャボン塊。ジェネラティブアートの挑戦。</li>
           </ul>
         </section>
         <section aria-label="メンバー詳細">
