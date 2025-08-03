@@ -46,10 +46,10 @@ export function EventCard({ event, isHighlighted = false }: EventCardProps) {
           transition-all duration-500 cursor-pointer
           border border-gray-700
           ${isHighlighted
-            ? 'bg-purple-600/80 scale-150 shadow-lg shadow-purple-500/50 z-50'
+            ? 'bg-blue-600/80 scale-150 shadow-lg shadow-blue-500/50 z-50'
             : isSparkAward
-              ? 'bg-gradient-to-br from-purple-600/40 to-pink-600/40 hover:from-purple-500/50 hover:to-pink-500/50 hover:border-purple-400 hover:scale-105 shadow-lg shadow-purple-500/30'
-              : 'bg-gray-800/20 hover:bg-gray-700/30 hover:border-purple-500 hover:scale-105'}`}
+              ? 'bg-gradient-to-br from-blue-600/40 to-red-600/40 hover:from-blue-500/50 hover:to-red-500/50 hover:border-blue-400 hover:scale-105 shadow-lg shadow-blue-500/30'
+              : 'bg-gray-800/20 hover:bg-gray-700/30 hover:border-blue-500 hover:scale-105'}`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <div className="relative">
@@ -94,7 +94,7 @@ export function EventCard({ event, isHighlighted = false }: EventCardProps) {
                 className="w-16 h-16 rounded-lg object-cover"
               />
               <div className="flex-1">
-                <p className="text-purple-400 font-medium">{event.source}</p>
+                <p className="text-blue-400 font-medium">{event.source}</p>
                 <p className="text-sm text-gray-400">{event.date}</p>
                 <div className="flex flex-wrap gap-2 mt-2">
                   <a
@@ -131,7 +131,7 @@ export function EventCard({ event, isHighlighted = false }: EventCardProps) {
 
             {event.sparkAwardWorks && (
               <div className="space-y-3">
-                <h4 className="text-lg font-semibold text-purple-400">出品作品</h4>
+                <h4 className="text-lg font-semibold text-blue-400">出品作品</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {event.sparkAwardWorks.map((work, index) => (
                     <div key={index} className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
@@ -154,7 +154,7 @@ export function EventCard({ event, isHighlighted = false }: EventCardProps) {
 
             {event.youtubeVideoId && (
               <div className="space-y-2">
-                <h4 className="text-lg font-semibold text-purple-400">展示記録</h4>
+                <h4 className="text-lg font-semibold text-blue-400">展示記録</h4>
                 <YouTubeEmbed
                   videoId={event.youtubeVideoId}
                   title={event.title}

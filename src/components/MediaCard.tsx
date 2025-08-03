@@ -48,10 +48,10 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
           transition-all duration-500 cursor-pointer
           border border-gray-700
           ${isHighlighted
-            ? 'bg-purple-600/80 scale-150 shadow-lg shadow-purple-500/50 z-50'
+            ? 'bg-blue-600/80 scale-150 shadow-lg shadow-blue-500/50 z-50'
             : isSparkAward
-              ? 'bg-gradient-to-br from-purple-600/40 to-pink-600/40 hover:from-purple-500/50 hover:to-pink-500/50 hover:border-purple-400 hover:scale-105 shadow-lg shadow-purple-500/30'
-              : 'bg-gray-800/20 hover:bg-gray-700/30 hover:border-purple-500 hover:scale-105'}`}
+              ? 'bg-gradient-to-br from-blue-600/40 to-red-600/40 hover:from-blue-500/50 hover:to-red-500/50 hover:border-blue-400 hover:scale-105 shadow-lg shadow-blue-500/30'
+              : 'bg-gray-800/20 hover:bg-gray-700/30 hover:border-blue-500 hover:scale-105'}`}
       >
         <div className="flex flex-col items-center justify-center h-full space-y-2">
           <div className="relative">
@@ -101,7 +101,7 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
                 className="w-16 h-16 rounded-lg object-cover"
               />
               <div className="flex-1">
-                <p className="text-purple-400 font-medium">{article.source}</p>
+                <p className="text-blue-400 font-medium">{article.source}</p>
                 <p className="text-sm text-gray-400">{article.date}</p>
                 {isSparkAward && (
                   <p className="text-sm text-yellow-400 font-medium">★ S×PARKアワード出品作品</p>
@@ -117,7 +117,7 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
 
             {article.youtubeVideoId && (
               <div className="space-y-2">
-                <h4 className="text-lg font-semibold text-purple-400">作品記録動画</h4>
+                <h4 className="text-lg font-semibold text-blue-400">作品記録動画</h4>
                 <div className="text-xs text-gray-500 mb-2">Video ID: {article.youtubeVideoId}</div>
                 <YouTubeEmbed
                   videoId={article.youtubeVideoId}
@@ -129,7 +129,7 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
 
             {article.sparkAwardWorks && (
               <div className="space-y-3">
-                <h4 className="text-lg font-semibold text-purple-400">出品作品</h4>
+                <h4 className="text-lg font-semibold text-blue-400">出品作品</h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {article.sparkAwardWorks.map((work, index) => (
                     <div key={index} className="bg-gray-800/50 rounded-lg p-3 border border-gray-700">
@@ -157,12 +157,12 @@ export function MediaCard({ article, isHighlighted = false }: MediaCardProps) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleLinkClick}
-                className="inline-flex items-center gap-2 bg-purple-600/20 hover:bg-purple-600/30
-                  backdrop-blur-sm rounded-full px-6 py-3 border border-purple-500/30
-                  transition-all duration-300 hover:border-purple-500/50 group"
+                className="inline-flex items-center gap-2 bg-blue-600/20 hover:bg-blue-600/30
+                  backdrop-blur-sm rounded-full px-6 py-3 border border-blue-500/30
+                  transition-all duration-300 hover:border-blue-500/50 group hover-metallic-blue"
               >
-                <span className="text-purple-300 text-sm">詳細を見る</span>
-                <ExternalLink size={16} className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+                <span className="text-blue-300 text-sm">詳細を見る</span>
+                <ExternalLink size={16} className="text-blue-400 group-hover:text-blue-300 transition-colors" />
               </a>
             </div>
           </div>

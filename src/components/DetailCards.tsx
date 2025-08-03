@@ -18,8 +18,8 @@ const CardBase = ({ onClick, children, isHighlighted = false }: CardBaseProps) =
       transition-all duration-500
       border border-gray-700
       ${isHighlighted
-        ? 'bg-purple-600/80 scale-150 shadow-lg shadow-purple-500/50 z-50'
-        : 'bg-gray-800/50 hover:bg-gray-700/50 hover:border-purple-500 hover:scale-105'}`}
+        ? 'bg-blue-600/80 scale-150 shadow-lg shadow-blue-500/50 z-50'
+        : 'bg-gray-800/50 hover:bg-gray-700/50 hover:border-blue-500 hover:scale-105'}`}
   >
     {children}
   </div>
@@ -80,7 +80,7 @@ export function ArtworkCard({ artwork }: { artwork: Artwork }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleLinkClick}
-              className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300"
+              className="inline-flex items-center space-x-2 text-blue-400 hover:text-blue-300"
             >
               <span className="text-sm md:text-base">詳細を見る</span>
               <ExternalLink size={16} />
@@ -144,7 +144,7 @@ export function MemberCard({ member }: { member: Member }) {
               className="w-24 h-24 md:w-32 md:h-32 rounded-full object-cover mx-auto md:mx-0"
             />
             <div>
-              <h4 className="text-lg md:text-xl text-purple-400 text-center md:text-left">{member.role}</h4>
+              <h4 className="text-lg md:text-xl text-blue-400 text-center md:text-left">{member.role}</h4>
               <DialogDescription className="text-sm md:text-base text-gray-300">
                 {member.bio}
               </DialogDescription>
@@ -153,7 +153,7 @@ export function MemberCard({ member }: { member: Member }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={handleLinkClick}
-                className="inline-flex items-center space-x-2 text-purple-400 hover:text-purple-300 mt-2"
+                className="inline-flex items-center space-x-2 text-blue-400 hover:text-blue-300 mt-2"
               >
                 <span className="text-sm md:text-base">プロフィールを見る</span>
                 <ExternalLink size={16} />

@@ -71,7 +71,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
               className="p-3 -m-3 hover:bg-gray-800/50 transition-all duration-300 rounded-lg group"
               aria-label="戻る"
             >
-              <ArrowLeft size={20} className="text-gray-400 group-hover:text-purple-400 transition-colors" />
+              <ArrowLeft size={20} className="text-gray-400 group-hover:text-blue-400 transition-colors" />
             </button>
 
             {/* タブナビゲーション */}
@@ -96,7 +96,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                   }}
                   className={`text-sm font-medium tracking-wide transition-all duration-300 ${
                     activeTab === key
-                      ? 'text-white border-b border-purple-400 pb-1'
+                      ? 'text-white border-b border-blue-400 pb-1'
                       : 'text-gray-400 hover:text-gray-200'
                   }`}
                 >
@@ -116,7 +116,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
           {/* ページタイトル */}
           <div className="mb-20 text-center">
             <h1 className={`text-5xl md:text-7xl font-light tracking-tight mb-6 transition-all duration-1000
-              text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 ${
+              metallic-blue-text ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}>
               Gallery
@@ -150,8 +150,8 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                     {/* 作品画像 - 全面表示で迫力を演出 */}
                     <div className={`${
                       index % 2 === 0 ? 'lg:col-span-3' : 'lg:col-span-3 lg:order-2'
-                    } relative overflow-hidden bg-gray-900/20 hover:bg-gray-800/30
-                      border border-gray-800/30 hover:border-purple-500/40 transition-all duration-500 rounded-lg group-hover:scale-[1.02]`}>
+                    } relative overflow-hidden bg-gray-800/20 backdrop-blur-sm
+                      border border-gray-800/30 hover:border-blue-500/40 transition-all duration-500 rounded-lg group-hover:scale-[1.02]`}>
                       <a
                         href={item.data.link}
                         target="_blank"
@@ -177,7 +177,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                           <h3 className="text-xl font-light text-white mb-2">
                             {item.type === 'artwork' ? item.data.title : item.data.name}
                           </h3>
-                          <p className="text-purple-300 text-sm flex items-center">
+                          <p className="text-blue-300 text-sm flex items-center">
                             <span>詳細を見る</span>
                             <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
@@ -192,7 +192,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                       index % 2 === 0 ? 'lg:col-span-2' : 'lg:col-span-2 lg:order-1'
                     } space-y-6`}>
                       <div className="space-y-2">
-                        <span className="text-xs uppercase tracking-[0.2em] text-purple-400 font-medium">
+                        <span className="text-xs uppercase tracking-[0.2em] text-blue-400 font-medium">
                           {item.type === 'artwork' ? 'Work' : 'Artist'} {String(itemNumber).padStart(2, '0')}
                         </span>
                       </div>
@@ -201,9 +201,9 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                         href={item.data.link}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block group-hover:text-purple-300 transition-colors duration-500"
+                        className="block group-hover:text-blue-300 transition-colors duration-500"
                       >
-                        <h2 className="text-3xl lg:text-4xl font-light tracking-wide leading-tight hover:text-purple-300 transition-colors duration-300 cursor-pointer">
+                        <h2 className="text-3xl lg:text-4xl font-light tracking-wide leading-tight hover:text-blue-300 transition-colors duration-300 cursor-pointer">
                           {item.type === 'artwork' ? item.data.title : item.data.name}
                         </h2>
                       </a>
@@ -216,7 +216,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
 
                       {item.type === 'member' && (
                         <div className="space-y-4">
-                          <p className="text-lg text-purple-300 font-medium">{item.data.role}</p>
+                          <p className="text-lg text-blue-300 font-medium">{item.data.role}</p>
                           {item.data.bio && (
                             <p className="text-gray-400 leading-relaxed">
                               {item.data.bio}
@@ -231,7 +231,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
                           href={item.data.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 transition-colors duration-300 group/link"
+                          className="inline-flex items-center text-sm text-blue-400 hover:text-blue-300 transition-colors duration-300 group/link"
                         >
                           <span>{item.type === 'artwork' ? '作品ページを見る' : 'プロフィールを見る'}</span>
                           <svg className="w-4 h-4 ml-2 transition-transform group-hover/link:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -242,7 +242,7 @@ export default function GalleryPage({ onBack, initialTab }: GalleryPageProps) {
 
                       {/* 展示風の詳細情報 */}
                       <div className="pt-6">
-                        <div className="w-12 h-px bg-gradient-to-r from-purple-400 to-transparent"></div>
+                        <div className="w-12 h-px bg-gradient-to-r from-blue-400 to-transparent"></div>
                       </div>
                     </div>
                   </div>

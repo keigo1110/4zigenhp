@@ -66,11 +66,11 @@ export function SearchHeader({ onSearch, onGalleryClick }: SearchHeaderProps) {
               transition-all duration-300 hover:scale-105 group"
             aria-label="ギャラリーを開く"
           >
-            <LayoutGrid size={18} className="md:w-5 md:h-5 text-white group-hover:text-purple-400 transition-colors" />
+            <LayoutGrid size={18} className="md:w-5 md:h-5 text-white group-hover:text-blue-400 transition-colors" />
           </button>
         )}
 
-        <h1 className="text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 animate-pulse">
+        <h1 className="text-4xl md:text-6xl font-bold metallic-blue-text animate-pulse">
           4ZIGEN
         </h1>
 
@@ -92,8 +92,8 @@ export function SearchHeader({ onSearch, onGalleryClick }: SearchHeaderProps) {
                 pl-4 md:pl-4
                 pr-12 md:pr-12
                 text-base md:text-base
-                border-2 ${searchTerm ? 'border-purple-500' : 'border-gray-600'}
-                focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500/30
+                border-2 ${searchTerm ? 'border-blue-500' : 'border-gray-600'}
+                focus:border-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500/30
                 transition-all duration-300 ease-out text-white placeholder-gray-400
                 ${isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             />
@@ -113,8 +113,8 @@ export function SearchHeader({ onSearch, onGalleryClick }: SearchHeaderProps) {
               onClick={handleSearchToggle}
               className={`absolute right-1 md:right-2 p-3 md:p-2 transition-all duration-300
                 ${isExpanded && searchTerm
-                  ? 'text-purple-400 bg-purple-500/20'
-                  : 'text-white hover:text-purple-400'
+                  ? 'doraemon-red text-white'
+                  : 'text-white hover:text-yellow-400'
                 }
                 rounded-full hover:bg-gray-700/30`}
               aria-label={isExpanded ? '検索を実行' : '検索を開く'}

@@ -176,9 +176,9 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                 <>
                   {/* 検索結果ヘッダー */}
                   <div className="mb-6 text-center">
-                    <div className="inline-flex items-center gap-2 bg-purple-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-500/30">
-                      <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                      <span className="text-purple-300 text-sm font-medium">検索結果</span>
+                    <div className="inline-flex items-center gap-2 bg-blue-500/20 backdrop-blur-sm rounded-full px-4 py-2 border border-blue-500/30">
+                      <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                      <span className="text-blue-300 text-sm font-medium">検索結果</span>
                     </div>
                   </div>
 
@@ -199,8 +199,8 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                       <div
                         key={`search-${item.type}-${item.data.id}`}
                         className="w-72 h-72 transition-all duration-700 ease-out transform hover:scale-105 z-50
-                          bg-gradient-to-br from-purple-500/10 to-pink-500/10 rounded-3xl p-4 backdrop-blur-sm
-                          border border-purple-500/20 shadow-2xl shadow-purple-500/20"
+                          bg-gradient-to-br from-blue-500/10 to-red-500/10 rounded-3xl p-4 backdrop-blur-sm
+                          border border-blue-500/20 shadow-2xl shadow-blue-500/20"
                       >
                         {item.type === 'event' ? (
                           <EnhancedEventItem
@@ -258,12 +258,12 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
                   <div className="mt-6">
                     <button
                       onClick={() => window.dispatchEvent(new CustomEvent('clearSearch'))}
-                      className="inline-flex items-center gap-2 bg-purple-500/20 hover:bg-purple-500/30
-                        backdrop-blur-sm rounded-full px-6 py-3 border border-purple-500/30
-                        transition-all duration-300 hover:border-purple-500/50 group"
+                      className="inline-flex items-center gap-2 bg-blue-500/20 hover:bg-blue-500/30
+                        backdrop-blur-sm rounded-full px-6 py-3 border border-blue-500/30
+                        transition-all duration-300 hover:border-blue-500/50 group"
                     >
-                      <span className="text-purple-300 text-sm">すべてのアイテムを見る</span>
-                      <X size={16} className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+                      <span className="text-blue-300 text-sm">すべてのアイテムを見る</span>
+                      <X size={16} className="text-blue-400 group-hover:text-blue-300 transition-colors" />
                     </button>
                   </div>
                 </div>
@@ -356,7 +356,7 @@ export default function InfiniteScrollLayout({ searchHighlightInfo }: InfiniteSc
         {isLoading && !isSearchActive && (
           <div className="flex justify-center items-center py-4">
             <div className="relative">
-              <div className="w-6 h-6 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div>
+              <div className="w-6 h-6 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
             </div>
             <span className="ml-2 text-gray-400 text-xs">読み込み中...</span>
           </div>
